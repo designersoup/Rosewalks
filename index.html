@@ -191,7 +191,7 @@ nav.tabs button.on{background:var(--paper);color:var(--ink)}
 /* Sheet */
 .backdrop{position:fixed;inset:0;background:rgba(46,42,38,.4);opacity:0;pointer-events:none;transition:opacity .25s;z-index:10}
 .sheet{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;background:var(--paper);border:1.5px solid var(--ink);border-bottom:0;border-radius:26px 26px 0 0;padding:10px 18px calc(env(safe-area-inset-bottom) + 22px);transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1);z-index:11;max-height:88vh;overflow:auto}
-.sheet .grab{width:44px;height:5px;border-radius:9px;background:var(--muted);margin:0 auto 12px}
+.sheet .grab{width:44px;height:5px;border-radius:999px;background:var(--muted);margin:0 auto 12px}
 .sheet h2{margin:4px 0 6px;font-size:24px}
 .sheet p{color:var(--ink2);margin:0 0 14px;line-height:1.4}
 body.sheet-open .backdrop{opacity:1;pointer-events:auto}
@@ -234,9 +234,9 @@ hr.sep{border:0;border-top:1.5px dashed var(--muted);margin:20px 0}
 
   <!-- TODAY -->
   <section class="view on" id="view-today">
-    <button class="chip weatherchip" id="wxChip" aria-label="Leeds weather (tap to preview other weather)">
+    <div class="chip weatherchip" id="wxChip" aria-label="Leeds weather">
       <span id="wxIcon"></span><span id="wxText">Leeds · fetching weather…</span>
-    </button>
+    </div>
 
     <div class="seg" role="tablist">
       <button class="on" data-mode="day">Today's walk</button>
@@ -319,22 +319,24 @@ hr.sep{border:0;border-top:1.5px dashed var(--muted);margin:20px 0}
         <g id="plants"></g>
         <!-- dogs -->
         <g id="wilbur" class="wil" transform="translate(440 238)"><g class="dflip"><g class="dogbody">
-          <path class="tail" d="M9.5 -14 q2.6 -1.4 2.8 -3.4" stroke="#2F2723" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+          <!-- Short stubby Frenchie stump tail -->
+          <path class="tail" d="M8.5 -13.5 q1.3 -0.7 1.4 -1.7" stroke="#2F2723" stroke-width="2.6" stroke-linecap="round" fill="none"/>
           <g fill="#2B2420"><rect class="dleg a" x="-8.6" y="-8" width="3.6" height="8.5" rx="1.6"/><rect class="dleg b" x="-4" y="-8" width="3.6" height="8.5" rx="1.6"/><rect class="dleg a" x="3" y="-8" width="3.6" height="8.5" rx="1.6"/><rect class="dleg b" x="6.8" y="-8" width="3.6" height="8.5" rx="1.6"/></g>
           <ellipse cx="0" cy="-12" rx="11" ry="6.8" fill="#2F2723"/>
           <path d="M-3 -17 q1 4 -.5 9 M1.5 -17.5 q1 4.5 -.5 10 M6 -16.5 q.8 3.5 -.5 8" stroke="#4A3A2F" stroke-width="1.1" fill="none" opacity=".75" stroke-linecap="round"/>
           <ellipse cx="-8.6" cy="-10.6" rx="1.7" ry="2.8" fill="#F1EBE2"/>
-          <path d="M-15.8 -23 Q-19.4 -33.5 -15.6 -36 Q-12 -34 -11.6 -24.5Z" fill="#2F2723"/><path d="M-15.2 -25 Q-17.2 -32 -15.4 -33.6 Q-13.6 -32 -13.4 -25.5Z" fill="#9C6E66"/>
-          <path d="M-9.4 -24.5 Q-9 -35 -5.2 -36 Q-3 -32 -5.4 -22.5Z" fill="#2F2723"/><path d="M-8.4 -25.2 Q-7.8 -32.4 -5.6 -33.4 Q-4.6 -30 -6.2 -24.5Z" fill="#9C6E66"/>
+          <!-- Frenchie ears: dark grey inner ear fill (#3B322C) -->
+          <path d="M-15.8 -23 Q-19.4 -33.5 -15.6 -36 Q-12 -34 -11.6 -24.5Z" fill="#2F2723"/><path d="M-15.2 -25 Q-17.2 -32 -15.4 -33.6 Q-13.6 -32 -13.4 -25.5Z" fill="#3B322C"/>
+          <path d="M-9.4 -24.5 Q-9 -35 -5.2 -36 Q-3 -32 -5.4 -22.5Z" fill="#2F2723"/><path d="M-8.4 -25.2 Q-7.8 -32.4 -5.6 -33.4 Q-4.6 -30 -6.2 -24.5Z" fill="#3B322C"/>
           <circle cx="-11.2" cy="-19.6" r="7.3" fill="#2F2723"/>
           <path d="M-7 -24 q1.5 3 0 6" stroke="#4A3A2F" stroke-width="1" fill="none" opacity=".7" stroke-linecap="round"/>
-          <ellipse cx="-16.4" cy="-16.6" rx="3" ry="3.3" fill="#4D3D32"/>
-          <path d="M-18.6 -19.3 q2 -1.4 4.2 0" stroke="#221B17" stroke-width=".8" fill="none" stroke-linecap="round"/>
-          <ellipse cx="-18.6" cy="-17.6" rx="1.5" ry="1.1" fill="#120E0B"/>
-          <path d="M-18.2 -15.2 q1.6 1.2 3.4 .2" stroke="#221B17" stroke-width=".8" fill="none" stroke-linecap="round"/>
+          <!-- Frenchie snout lowered and flattened -->
+          <ellipse cx="-15.8" cy="-15.2" rx="3.4" ry="2.8" fill="#221B17"/>
+          <path d="M-18.0 -17.5 q2 -1.2 4.0 0" stroke="#120E0B" stroke-width=".8" fill="none" stroke-linecap="round"/>
+          <ellipse cx="-18.0" cy="-16.0" rx="1.4" ry="1.0" fill="#0A0806"/>
+          <path d="M-17.6 -13.8 q1.6 0.9 3.2 0.1" stroke="#120E0B" stroke-width=".8" fill="none" stroke-linecap="round"/>
           <circle cx="-14.4" cy="-21" r="2" fill="#5A4A40"/><circle cx="-14.5" cy="-21" r="1.55" fill="#120E0B"/><circle cx="-15" cy="-21.6" r=".55" fill="#fff"/>
           <circle cx="-9.2" cy="-21.2" r="1.9" fill="#5A4A40"/><circle cx="-9.3" cy="-21.2" r="1.45" fill="#120E0B"/><circle cx="-9.8" cy="-21.8" r=".5" fill="#fff"/>
-          <ellipse class="tongue" cx="-16.6" cy="-13.4" rx="1.1" ry="1.5" fill="#E5707E"/>
         </g></g></g>
         <g id="eddie" class="ed" transform="translate(440 247)"><g class="dflip"><g class="dogbody">
           <g fill="#E9C893"><rect class="dleg a" x="-7" y="-5" width="3" height="5" rx="1.4"/><rect class="dleg b" x="-3" y="-5" width="3" height="5" rx="1.4"/><rect class="dleg a" x="3" y="-5" width="3" height="5" rx="1.4"/><rect class="dleg b" x="6.5" y="-5" width="3" height="5" rx="1.4"/></g>
@@ -494,7 +496,7 @@ const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth()
 const weekStart=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x;};
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const fmtRange=ws=>{const we=addDays(ws,6);return ws.getMonth()===we.getMonth()?`${ws.getDate()} – ${we.getDate()} ${MONTHS[we.getMonth()]}`:`${ws.getDate()} ${MONTHS[ws.getMonth()]} – ${we.getDate()} ${MONTHS[we.getMonth()]}`;};
+const fmtRange=ws=>{const we=addDays(ws,6);return ws.getMonth()===we.getMonth()?`${ws.getDate()} – ${we.getDate()} ${MONTHS[we.getMonth()]}`:`${ws.getDate()} ${MONTHS[we.getMonth()]} – ${we.getDate()} ${MONTHS[we.getMonth()]}`;};
 const fmt=n=>{const r=Math.round(n*10)/10;return r.toLocaleString('en-GB',{maximumFractionDigits:1});};
 
 /* ---------- data helpers ---------- */
@@ -675,8 +677,7 @@ async function loadWords(){
     renderMsg();if($('#view-year').classList.contains('on'))renderYear();
   }catch(e){}
 }
-let liveWx=null, previewIdx=-1;
-const PREVIEW=[{kind:'clear',isDay:true,temp:21},{kind:'partly',isDay:true,temp:15},{kind:'cloudy',isDay:true,temp:10},{kind:'fog',isDay:true,temp:6},{kind:'drizzle',isDay:true,temp:9},{kind:'rain',isDay:true,temp:8,heavy:true},{kind:'storm',isDay:true,temp:12},{kind:'snow',isDay:true,temp:-1},{kind:'clear',isDay:false,temp:5}];
+let liveWx=null;
 
 function applyWeather(w){
   const k=w.kind, day=w.isDay!==false, windy=(w.wind||0)>28;
@@ -716,28 +717,23 @@ function applyWeather(w){
   roseEl.style.setProperty('--coat',bomber?'#1F1C1A':'#2A2A2E');roseEl.style.setProperty('--coatDark',bomber?'#141210':'#1B1B1E');
   // chip
   $('#wxIcon').innerHTML=wxIconSVG(k,day);
-  const label=w.preview?`Preview: ${k}${day?'':' (night)'} · tap`:`Leeds · ${Math.round(w.temp)}° · ${WX_LABEL[w.code]||k}${w.max!=null?` · H${Math.round(w.max)}° L${Math.round(w.min)}°`:''}`;
+  const label=`Leeds · ${Math.round(w.temp)}° · ${WX_LABEL[w.code]||k}${w.max!=null?` · H${Math.round(w.max)}° L${Math.round(w.min)}°`:''}`;
   $('#wxText').textContent=label;
   currentWx=w;renderMsg();
 }
 let currentWx={kind:'cloudy',isDay:true,temp:10};
 async function fetchWeather(force){
-  try{const c=JSON.parse(localStorage.getItem(WXSTORE)||'null');if(c&&!force&&Date.now()-c.at<30*60e3){liveWx=c.data;if(previewIdx<0)applyWeather(liveWx);return;}}catch(e){}
+  try{const c=JSON.parse(localStorage.getItem(WXSTORE)||'null');if(c&&!force&&Date.now()-c.at<30*60e3){liveWx=c.data;applyWeather(liveWx);return;}}catch(e){}
   try{
     const url=`https://api.open-meteo.com/v1/forecast?latitude=${LEEDS.lat}&longitude=${LEEDS.lon}&current=temperature_2m,weather_code,is_day,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Europe%2FLondon&forecast_days=1`;
     const r=await fetch(url);if(!r.ok)throw new Error(r.status);const j=await r.json();
     liveWx={code:j.current.weather_code,kind:kindOf(j.current.weather_code),temp:j.current.temperature_2m,isDay:!!j.current.is_day,wind:j.current.wind_speed_10m,max:j.daily.temperature_2m_max[0],min:j.daily.temperature_2m_min[0],heavy:[65,82].includes(j.current.weather_code)};
     try{localStorage.setItem(WXSTORE,JSON.stringify({at:Date.now(),data:liveWx}));}catch(e){}
-    if(previewIdx<0)applyWeather(liveWx);
+    applyWeather(liveWx);
   }catch(e){
-    if(!liveWx&&previewIdx<0){const h=new Date().getHours();applyWeather({kind:'cloudy',isDay:h>=7&&h<18,temp:10,code:3});$('#wxText').textContent='Leeds · weather offline';}
+    if(!liveWx){const h=new Date().getHours();applyWeather({kind:'cloudy',isDay:h>=7&&h<18,temp:10,code:3});$('#wxText').textContent='Leeds · weather offline';}
   }
 }
-$('#wxChip').addEventListener('click',()=>{
-  previewIdx++;
-  if(previewIdx>=PREVIEW.length){previewIdx=-1;if(liveWx)applyWeather(liveWx);else fetchWeather(true);toast('Back to live Leeds weather');return;}
-  applyWeather(Object.assign({preview:true},PREVIEW[previewIdx]));
-});
 
 /* ---------- UI rendering ---------- */
 let lastMsgKey='';

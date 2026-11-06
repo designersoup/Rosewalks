@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Rose Walks">
+<meta name="theme-color" content="#F4ECDF">
+<title>Rose's Walks</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23F4ECDF'/%3E%3Crect x='29' y='30' width='6' height='22' rx='2' fill='%237A5638'/%3E%3Ccircle cx='32' cy='24' r='14' fill='%23D9824A'/%3E%3Ccircle cx='22' cy='30' r='8' fill='%23E3A93B'/%3E%3Ccircle cx='42' cy='30' r='8' fill='%23C1603A'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" id="touchIcon" href="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500;1,9..144,700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4ECDF; --card:#FFFBF4; --ink:#2E2A26; --ink2:#6E655B; --muted:#A99E90;
+  --sage:#8DA47E; --moss:#4F6B48; --terra:#D9825B; --mustard:#E3A93B; --pink:#E7A1A6;
+  --sky:#A9CBE0; --track:#EADFCD;
+  --coat:#E3A93B; --coatDark:#C98E25;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{color-scheme:light}
+body{
+  margin:0;color:var(--ink);font-family:'Nunito',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
+  background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .18 0 0 0 0 .16 0 0 0 0 .14 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.app{max-width:480px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 100px)}
+h1,h2,h3,.serif{font-family:'Fraunces',Georgia,serif;font-weight:700;letter-spacing:-.01em}
+header.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+header.top h1{font-size:30px;line-height:1.05;margin:0;font-style:italic}
+header.top .sub{color:var(--ink2);font-size:14px;margin-top:4px;font-weight:700}
+.iconbtn{width:42px;height:42px;border-radius:14px;border:1.5px solid var(--ink);background:var(--card);display:grid;place-items:center;box-shadow:2px 2px 0 var(--ink);flex:none}
+.iconbtn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+.card{background:var(--card);border:1.5px solid var(--ink);border-radius:22px;box-shadow:3px 3px 0 var(--ink);padding:16px;margin-bottom:16px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;border:1.5px solid var(--ink);background:var(--card);font-weight:800;font-size:13px}
+.weatherchip{margin-bottom:10px}
+.weatherchip svg{width:20px;height:20px}
+.seg{display:flex;background:var(--track);border-radius:999px;padding:3px;margin-bottom:10px;border:1.5px solid var(--ink)}
+.seg button{flex:1;padding:7px 0;border-radius:999px;font-weight:800;font-size:14px;color:var(--ink2)}
+.seg button.on{background:var(--ink);color:var(--paper)}
+
+/* Scene */
+.scene-wrap{position:relative;border-radius:22px;overflow:hidden;border:1.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);margin-bottom:16px;background:#DDEFF5}
+.scene-wrap svg.scene{display:block;width:100%;height:auto}
+.scene-pill{position:absolute;left:10px;top:10px;background:rgba(255,251,244,.92);border:1.5px solid var(--ink);border-radius:999px;padding:5px 11px;font-weight:800;font-size:13px}
+.scene-msg{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;max-width:calc(100% - 20px);width:max-content;text-align:center;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:13.5px;color:#FFFBF4;background:rgba(46,42,38,.62);padding:4px 12px;border-radius:999px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.scene-msg:empty{display:none}
+
+/* SVG animation */
+.anim *{transform-box:fill-box}
+.leg,.arm{transform-origin:50% 0;transition:transform .5s ease}
+.walking .leg-front{animation:swingA .55s ease-in-out infinite alternate}
+.walking .leg-back{animation:swingB .55s ease-in-out infinite alternate}
+.walking .arm-front{animation:swingB .55s ease-in-out infinite alternate}
+.walking .arm-back{animation:swingA .55s ease-in-out infinite alternate}
+.walking .bob{animation:bob .275s ease-in-out infinite alternate}
+@keyframes swingA{from{transform:rotate(-24deg)}to{transform:rotate(24deg)}}
+@keyframes swingB{from{transform:rotate(24deg)}to{transform:rotate(-24deg)}}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-1.2px)}}
+.bob{transform-origin:50% 100%;transition:transform .5s ease}
+#rose:not(.walking) .bob{animation:breathe 3.2s ease-in-out infinite}
+@keyframes breathe{50%{transform:translateY(-.5px)}}
+.hugging .arm-front{transform:rotate(-80deg)}
+.hugging .arm-back{transform:rotate(-70deg)}
+#rose.hugging .bob{animation:none;transform:rotate(7deg)}
+.dleg{transform-origin:50% 0}
+.running .dleg.a{animation:dogA .18s linear infinite alternate}
+.running .dleg.b{animation:dogB .18s linear infinite alternate}
+@keyframes dogA{from{transform:rotate(-35deg)}to{transform:rotate(35deg)}}
+@keyframes dogB{from{transform:rotate(35deg)}to{transform:rotate(-35deg)}}
+.tail{transform-origin:0% 100%;animation:wag .35s ease-in-out infinite alternate}
+@keyframes wag{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+.cheer .dogbody{animation:jump .6s ease-in-out infinite}
+.cheer.wil .dogbody{animation-delay:.3s}
+@keyframes jump{0%,100%{transform:translateY(0)}40%{transform:translateY(-9px)}}
+.drift{animation:drift linear infinite}
+@keyframes drift{from{transform:translateX(-80px)}to{transform:translateX(480px)}}
+.fly{animation:fly linear infinite}
+@keyframes fly{from{transform:translate(-30px,0)}50%{transform:translate(200px,-12px)}to{transform:translate(440px,4px)}}
+.flap{transform-origin:50% 50%;animation:flap .35s ease-in-out infinite alternate}
+@keyframes flap{from{transform:scaleY(1)}to{transform:scaleY(-.6)}}
+.wing{transform-origin:50% 50%;animation:wingflap .22s ease-in-out infinite alternate}
+@keyframes wingflap{from{transform:scaleX(1)}to{transform:scaleX(.25)}}
+.flutter{animation:flutter 14s ease-in-out infinite}
+@keyframes flutter{0%{transform:translate(0,0)}20%{transform:translate(40px,-18px)}40%{transform:translate(85px,4px)}60%{transform:translate(55px,-26px)}80%{transform:translate(18px,-8px)}100%{transform:translate(0,0)}}
+.rays{transform-origin:50% 50%;animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sway{transform-origin:50% 100%;animation:sway 3s ease-in-out infinite alternate}
+.windy .sway{animation-duration:1s}
+@keyframes sway{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.fallA{animation:fall .7s linear infinite}
+.fallB{animation:fall 1.1s linear infinite}
+@keyframes fall{from{transform:translateY(-260px)}to{transform:translateY(0)}}
+.snowA{animation:fall 9s linear infinite}
+.snowB{animation:fall 14s linear infinite}
+.snowsway{animation:snowsway 4s ease-in-out infinite alternate}
+@keyframes snowsway{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+.fog{animation:fogmove 30s ease-in-out infinite alternate}
+@keyframes fogmove{from{transform:translateX(-30px)}to{transform:translateX(30px)}}
+.flash{animation:flash 7s linear infinite;opacity:0}
+@keyframes flash{0%,90%,100%{opacity:0}91%{opacity:.75}92%{opacity:.1}93%{opacity:.6}95%{opacity:0}}
+.twinkle{animation:twinkle 2.5s ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.25}to{opacity:1}}
+.leaf{animation:leaffall 7s ease-in infinite;opacity:0}
+@keyframes leaffall{0%{opacity:0;transform:translate(0,0) rotate(0)}10%{opacity:1}100%{opacity:0;transform:translate(-40px,95px) rotate(300deg)}}
+.heart{animation:heartup 1.8s ease-out forwards}
+@keyframes heartup{from{opacity:1;transform:translate(0,0) scale(.6)}to{opacity:0;transform:translate(var(--dx),-34px) scale(1.2)}}
+.robin{animation:robin 4s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes robin{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-12deg)}90%{transform:rotate(0)}}
+.flick{transform-origin:100% 100%;animation:flick 3.5s ease-in-out infinite}
+@keyframes flick{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(-14deg)}80%{transform:rotate(6deg)}85%{transform:rotate(-10deg)}}
+.hop{animation:hop 5s ease-in-out infinite}
+@keyframes hop{0%,82%,100%{transform:translate(0,0)}88%{transform:translate(-5px,-7px)}94%{transform:translate(-10px,0)}97%{transform:translate(-10px,0)}}
+.graze{transform-origin:100% 0%;animation:graze 6s ease-in-out infinite}
+@keyframes graze{0%,40%,100%{transform:rotate(0)}50%,85%{transform:rotate(-28deg)}}
+.goatgraze{transform-origin:0% 0%;animation:goatgraze 7s ease-in-out infinite}
+@keyframes goatgraze{0%,45%,100%{transform:rotate(0)}55%,85%{transform:rotate(30deg)}}
+.ripple{animation:ripple 1.6s ease-out infinite;transform-origin:50% 50%}
+@keyframes ripple{from{transform:scale(.3);opacity:.9}to{transform:scale(1.4);opacity:0}}
+
+/* Stats */
+.big{font-family:'Fraunces',serif;font-weight:700;font-size:34px;line-height:1}
+.big small{font-size:16px;color:var(--ink2);font-weight:500;font-family:'Nunito',sans-serif}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);font-weight:800}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.bar{height:12px;border-radius:999px;background:var(--track);overflow:hidden;border:1.5px solid var(--ink);margin:10px 0 8px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--moss));border-radius:999px;transition:width .8s cubic-bezier(.3,1.3,.5,1)}
+.bar.gold>i{background:linear-gradient(90deg,#F2C14E,var(--mustard))}
+.pace{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.35;margin-top:8px}
+.pace .dot{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;flex:none;border:1.5px solid var(--ink);font-size:15px}
+.ahead .dot{background:#CFE3BF}.behind .dot{background:#F6D6C3}
+
+/* Add form */
+.addrow{display:flex;gap:10px;margin-top:4px}
+.kmfield{flex:1;min-width:0;display:flex;align-items:center;border:1.5px solid var(--ink);border-radius:16px;background:#fff;padding:0 14px}
+.kmfield input{flex:1;min-width:0;border:0;outline:0;font:700 24px 'Fraunces',serif;padding:12px 0;background:transparent;color:var(--ink)}
+.kmfield span{font-weight:800;color:var(--ink2)}
+.btn{background:var(--ink);color:var(--paper);border-radius:16px;padding:0 20px;font-weight:800;font-size:16px;min-height:52px;box-shadow:2px 2px 0 var(--terra)}
+.btn:active{transform:translate(2px,2px);box-shadow:none}
+.btn.soft{background:var(--card);color:var(--ink);border:1.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.btn.danger{background:#B5562F}
+.quick{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.quick button{padding:7px 13px;border-radius:999px;border:1.5px dashed var(--ink2);font-weight:800;font-size:14px;color:var(--ink2)}
+.quick button:active{background:var(--track)}
+.undo{font-size:13px;color:var(--ink2);text-decoration:underline;margin-top:10px;font-weight:700}
+
+/* Week strip */
+.strip{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:10px}
+.day{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;border-radius:14px}
+.day.today{background:var(--track)}
+.day .dname{font-size:12px;font-weight:800;color:var(--ink2)}
+.day .dkm{font-size:12px;font-weight:800}
+.day.future{opacity:.4}
+.day .ring{height:34px;display:grid;place-items:center}
+.medal-pop{animation:pop .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
+
+/* Weeks & year */
+.weekcard .head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.weekcard h3{margin:0;font-size:18px}
+.weekcard .tot{font-weight:800}
+.minibars{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:58px;margin-top:10px;position:relative}
+.minibars .b{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:2px}
+.minibars .b i{display:block;width:100%;max-width:26px;border-radius:7px 7px 3px 3px;background:var(--sage);border:1.2px solid var(--ink);min-height:3px}
+.minibars .b.hit i{background:var(--mustard)}
+.minibars .b span{font-size:10px;font-weight:800;color:var(--ink2)}
+.medals{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;font-weight:800;color:var(--ink2);flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:4px;background:#FBEBC4;border:1.5px solid var(--ink);border-radius:999px;padding:3px 9px 3px 5px;font-size:12px;font-weight:800;color:var(--ink)}
+.yearhead{text-align:center;padding:22px 16px}
+.yearhead .big{font-size:52px}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{background:var(--card);border:1.5px solid var(--ink);border-radius:18px;padding:12px 14px;box-shadow:2px 2px 0 var(--ink)}
+.stat b{display:block;font:700 24px 'Fraunces',serif;margin-top:2px}
+.yearnav{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px}
+.yearnav h2{margin:0;font-size:24px}
+.section-title{font-size:20px;margin:22px 0 10px}
+.journey{font-size:15px;line-height:1.4}
+
+/* Tabs */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:8px 16px calc(env(safe-area-inset-bottom) + 8px);background:linear-gradient(transparent,var(--paper) 30%);z-index:5}
+nav.tabs .inner{display:flex;gap:4px;background:var(--ink);border-radius:999px;padding:5px;width:100%;max-width:448px;box-shadow:0 6px 18px rgba(46,42,38,.25)}
+nav.tabs button{flex:1;color:#CFC5B7;font-weight:800;padding:11px 0;border-radius:999px;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px}
+nav.tabs button.on{background:var(--paper);color:var(--ink)}
+.view{display:none}.view.on{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Sheet */
+.backdrop{position:fixed;inset:0;background:rgba(46,42,38,.4);opacity:0;pointer-events:none;transition:opacity .25s;z-index:10}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;background:var(--paper);border:1.5px solid var(--ink);border-bottom:0;border-radius:26px 26px 0 0;padding:10px 18px calc(env(safe-area-inset-bottom) + 22px);transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1);z-index:11;max-height:88vh;overflow:auto}
+.sheet .grab{width:44px;height:5px;border-radius:9px;background:var(--muted);margin:0 auto 12px}
+.sheet h2{margin:4px 0 6px;font-size:24px}
+.sheet p{color:var(--ink2);margin:0 0 14px;line-height:1.4}
+body.sheet-open .backdrop{opacity:1;pointer-events:auto}
+body.sheet-open .sheet{transform:none}
+.stepper{display:flex;align-items:center;gap:12px;margin:8px 0 18px}
+.stepper button{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--ink);background:var(--card);font-size:24px;font-weight:800;box-shadow:2px 2px 0 var(--ink)}
+.stepper .val{flex:1;text-align:center;font:700 40px 'Fraunces',serif}
+.stepper .val small{font:800 15px 'Nunito',sans-serif;color:var(--ink2)}
+.field{margin-bottom:16px}
+.field label{display:block;margin-bottom:6px}
+.textin{width:100%;font:700 17px 'Nunito',sans-serif;border:1.5px solid var(--ink);border-radius:14px;padding:12px 14px;background:#fff;color:var(--ink)}
+.entries{list-style:none;padding:0;margin:0 0 14px}
+.entries li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1.5px dashed var(--track);font-weight:700}
+.entries li button{color:#B5562F;font-weight:800;font-size:14px;padding:6px 8px}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.btnrow .btn{flex:1}
+hr.sep{border:0;border-top:1.5px dashed var(--muted);margin:20px 0}
+
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 14px);transform:translate(-50%,-140%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:999px;font-weight:800;z-index:20;transition:transform .4s cubic-bezier(.3,1.4,.5,1);display:flex;align-items:center;gap:8px;white-space:nowrap;max-width:92vw}
+.toast.show{transform:translate(-50%,0)}
+.confetti{position:fixed;top:-20px;width:10px;height:14px;border-radius:50% 0;z-index:19;pointer-events:none;animation:conf linear forwards}
+@keyframes conf{to{transform:translate(var(--dx),110vh) rotate(var(--r))}}
+.muted{color:var(--ink2)}
+.center{text-align:center}
+.empty{color:var(--ink2);text-align:center;padding:20px 10px;font-style:italic;font-family:'Fraunces',serif}
+@media (prefers-reduced-motion:reduce){.anim *{animation-duration:0s!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <h1 id="greet">Morning, Rose</h1>
+      <div class="sub" id="dateLine"></div>
+    </div>
+    <button class="iconbtn" id="openSettings" aria-label="Settings">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2E2A26" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg>
+    </button>
+  </header>
+
+  <!-- TODAY -->
+  <section class="view on" id="view-today">
+    <button class="chip weatherchip" id="wxChip" aria-label="Leeds weather (tap to preview other weather)">
+      <span id="wxIcon"></span><span id="wxText">Leeds · fetching weather…</span>
+    </button>
+
+    <div class="seg" role="tablist">
+      <button class="on" data-mode="day">Today's walk</button>
+      <button data-mode="week">This week</button>
+    </div>
+
+    <div class="scene-wrap">
+      <svg class="scene anim" id="scene" viewBox="0 0 400 260" aria-label="Rose walking towards a tree">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop id="sky1" offset="0" stop-color="#8EC5E6"/>
+            <stop id="sky2" offset="1" stop-color="#DDEFF5"/>
+          </linearGradient>
+          <radialGradient id="sunGlow"><stop offset="0" stop-color="#FFF3C4" stop-opacity=".9"/><stop offset="1" stop-color="#FFF3C4" stop-opacity="0"/></radialGradient>
+        </defs>
+        <rect width="400" height="260" fill="url(#skyGrad)"/>
+        <g id="stars"></g>
+        <g id="sun" transform="translate(300 52)">
+          <circle r="42" fill="url(#sunGlow)"/>
+          <g class="rays"><g stroke="#F4C24A" stroke-width="2.4" stroke-linecap="round">
+            <path d="M0-28v-6M0 28v6M-28 0h-6M28 0h6M-20-20l-4-4M20 20l4 4M20-20l4-4M-20 20l-4 4"/></g></g>
+          <circle r="18" fill="#F7C948"/>
+        </g>
+        <g id="moon" transform="translate(300 50)">
+          <circle r="16" fill="#F4EBD0"/><circle cx="7" cy="-5" r="14" fill="#2A3558" id="moonCut"/>
+        </g>
+        <g id="clouds"></g>
+        <g id="birds"></g>
+        <!-- far hills -->
+        <path id="farHill" d="M0 150 C 50 118, 110 116, 170 136 S 290 110, 400 128 L400 260 L0 260Z" fill="#BFD0A6"/>
+        <g fill="none" stroke="#97AB83" stroke-width="1.1" stroke-dasharray="2.5 1.6" opacity=".9">
+          <path d="M28 141 C 78 129, 120 131, 160 143"/><path d="M215 129 C 262 120, 322 117, 398 133"/><path d="M118 128 C 124 140, 127 152, 131 162"/><path d="M300 119 C 304 130, 306 140, 312 152"/>
+        </g>
+        <g id="sheep"></g>
+        <path id="midHill" d="M0 186 C 60 160, 130 158, 200 172 S 330 166, 400 158 L400 260 L0 260Z" fill="#A6BF8A"/>
+        <g id="field"></g>
+        <!-- dry stone wall + robin -->
+        <path d="M-6 203 C 40 195, 85 192, 132 197" stroke="#BDB5A5" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M-6 203 C 40 195, 85 192, 132 197" stroke="#9E9686" stroke-width="7" stroke-dasharray="5 3.5" fill="none" opacity=".55"/>
+        <g id="robin" transform="translate(74 189)"><g class="robin">
+          <path d="M-5 1 L-10 -1 L-9 3Z" fill="#7A5A3E"/>
+          <ellipse cx="0" cy="0" rx="5" ry="4.3" fill="#8A6A4A"/>
+          <circle cx="2.6" cy="0.4" r="3" fill="#E8673A"/>
+          <circle cx="2.8" cy="-3.6" r="2.7" fill="#8A6A4A"/>
+          <circle cx="3.8" cy="-4" r=".6" fill="#2E2A26"/>
+          <path d="M5.3 -3.6 L7.4 -3.2 L5.3 -2.7Z" fill="#2E2A26"/>
+          <path d="M-1 4 v2 M1.5 4 v2" stroke="#5A4232" stroke-width=".8"/>
+        </g></g>
+        <g id="squirrel"></g>
+        <path id="ground" d="M0 206 C 80 196, 160 206, 240 200 S 340 194, 400 198 L400 260 L0 260Z" fill="#8DAF72"/>
+        <g id="snowCover" opacity="0">
+          <path d="M0 150 C 50 118, 110 116, 170 136 S 290 110, 400 128 L400 136 C 290 120, 170 146, 110 126 C 60 124, 30 140, 0 158Z" fill="#fff"/>
+          <path d="M0 206 C 80 196, 160 206, 240 200 S 340 194, 400 198 L400 260 L0 260Z" fill="#F3F6F7" opacity=".75"/>
+          <path d="M-6 199 C 40 191, 85 188, 132 193" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </g>
+        <!-- path -->
+        <path d="M -30 250 L 18 248 C 60 244, 110 254, 170 243 S 270 226, 326 229 L 350 232" stroke="#D3BF9B" stroke-width="20" stroke-linecap="round" fill="none"/>
+        <path d="M -30 250 L 18 248 C 60 244, 110 254, 170 243 S 270 226, 326 229 L 350 232" stroke="#EFE2C8" stroke-width="15" stroke-linecap="round" fill="none"/>
+        <path d="M -30 250 L 18 248 C 60 244, 110 254, 170 243 S 270 226, 326 229" stroke="#D9C6A3" stroke-width="1.2" stroke-dasharray="1 9" stroke-linecap="round" fill="none"/>
+        <path id="motion" d="M 18 248 C 60 244, 110 254, 170 243 S 270 226, 326 229" fill="none" stroke="none"/>
+        <g id="puddles" opacity="0">
+          <ellipse cx="120" cy="250" rx="11" ry="2.6" fill="#9FB3C2"/><ellipse class="ripple" cx="120" cy="250" rx="6" ry="1.4" fill="none" stroke="#fff" stroke-width=".7"/>
+          <ellipse cx="238" cy="235" rx="8" ry="2" fill="#9FB3C2"/><ellipse class="ripple" cx="238" cy="235" rx="4" ry="1" fill="none" stroke="#fff" stroke-width=".7" style="animation-delay:.7s"/>
+        </g>
+        <g id="frogs"></g>
+        <!-- tree -->
+        <g id="tree" style="cursor:pointer">
+          <path d="M330 234 Q 336 230 336 214 Q 337 180 336 140 L 349 140 Q 347 182 349 214 Q 350 230 357 234 Z" fill="#7A5638"/>
+          <path d="M340 150 Q 344 190 341 228" stroke="#6A4A30" stroke-width="1.2" fill="none" opacity=".6"/>
+          <g stroke="#7A5638" stroke-linecap="round" fill="none">
+            <path d="M339 165 Q 326 150 312 134" stroke-width="5"/><path d="M346 160 Q 360 146 374 130" stroke-width="5"/>
+            <path d="M342 150 Q 341 125 343 98" stroke-width="5"/><path d="M322 145 Q 312 140 302 140" stroke-width="2.5"/>
+            <path d="M318 138 Q 314 124 318 112" stroke-width="2.5"/><path d="M366 138 Q 378 138 388 142" stroke-width="2.5"/>
+            <path d="M370 134 Q 372 118 366 106" stroke-width="2.5"/><path d="M343 112 Q 332 100 326 88" stroke-width="2.5"/><path d="M343 108 Q 354 96 360 86" stroke-width="2.5"/>
+          </g>
+          <g id="canopy"></g>
+          <g id="leaves"></g>
+        </g>
+        <g id="nightTint" opacity="0"><rect width="400" height="260" fill="#1B2445" opacity=".38"/></g>
+        <g id="plants"></g>
+        <!-- dogs -->
+        <g id="wilbur" class="wil" transform="translate(440 238)"><g class="dflip"><g class="dogbody">
+          <path class="tail" d="M9.5 -14 q2.6 -1.4 2.8 -3.4" stroke="#2F2723" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+          <g fill="#2B2420"><rect class="dleg a" x="-8.6" y="-8" width="3.6" height="8.5" rx="1.6"/><rect class="dleg b" x="-4" y="-8" width="3.6" height="8.5" rx="1.6"/><rect class="dleg a" x="3" y="-8" width="3.6" height="8.5" rx="1.6"/><rect class="dleg b" x="6.8" y="-8" width="3.6" height="8.5" rx="1.6"/></g>
+          <ellipse cx="0" cy="-12" rx="11" ry="6.8" fill="#2F2723"/>
+          <path d="M-3 -17 q1 4 -.5 9 M1.5 -17.5 q1 4.5 -.5 10 M6 -16.5 q.8 3.5 -.5 8" stroke="#4A3A2F" stroke-width="1.1" fill="none" opacity=".75" stroke-linecap="round"/>
+          <ellipse cx="-8.6" cy="-10.6" rx="1.7" ry="2.8" fill="#F1EBE2"/>
+          <path d="M-15.8 -23 Q-19.4 -33.5 -15.6 -36 Q-12 -34 -11.6 -24.5Z" fill="#2F2723"/><path d="M-15.2 -25 Q-17.2 -32 -15.4 -33.6 Q-13.6 -32 -13.4 -25.5Z" fill="#9C6E66"/>
+          <path d="M-9.4 -24.5 Q-9 -35 -5.2 -36 Q-3 -32 -5.4 -22.5Z" fill="#2F2723"/><path d="M-8.4 -25.2 Q-7.8 -32.4 -5.6 -33.4 Q-4.6 -30 -6.2 -24.5Z" fill="#9C6E66"/>
+          <circle cx="-11.2" cy="-19.6" r="7.3" fill="#2F2723"/>
+          <path d="M-7 -24 q1.5 3 0 6" stroke="#4A3A2F" stroke-width="1" fill="none" opacity=".7" stroke-linecap="round"/>
+          <ellipse cx="-16.4" cy="-16.6" rx="3" ry="3.3" fill="#4D3D32"/>
+          <path d="M-18.6 -19.3 q2 -1.4 4.2 0" stroke="#221B17" stroke-width=".8" fill="none" stroke-linecap="round"/>
+          <ellipse cx="-18.6" cy="-17.6" rx="1.5" ry="1.1" fill="#120E0B"/>
+          <path d="M-18.2 -15.2 q1.6 1.2 3.4 .2" stroke="#221B17" stroke-width=".8" fill="none" stroke-linecap="round"/>
+          <circle cx="-14.4" cy="-21" r="2" fill="#5A4A40"/><circle cx="-14.5" cy="-21" r="1.55" fill="#120E0B"/><circle cx="-15" cy="-21.6" r=".55" fill="#fff"/>
+          <circle cx="-9.2" cy="-21.2" r="1.9" fill="#5A4A40"/><circle cx="-9.3" cy="-21.2" r="1.45" fill="#120E0B"/><circle cx="-9.8" cy="-21.8" r=".5" fill="#fff"/>
+          <ellipse class="tongue" cx="-16.6" cy="-13.4" rx="1.1" ry="1.5" fill="#E5707E"/>
+        </g></g></g>
+        <g id="eddie" class="ed" transform="translate(440 247)"><g class="dflip"><g class="dogbody">
+          <g fill="#E9C893"><rect class="dleg a" x="-7" y="-5" width="3" height="5" rx="1.4"/><rect class="dleg b" x="-3" y="-5" width="3" height="5" rx="1.4"/><rect class="dleg a" x="3" y="-5" width="3" height="5" rx="1.4"/><rect class="dleg b" x="6.5" y="-5" width="3" height="5" rx="1.4"/></g>
+          <g class="tail"><circle cx="9" cy="-15" r="5.6" fill="#F6E2BC"/><circle cx="12" cy="-19" r="4.2" fill="#FAEBCD"/><circle cx="6" cy="-19" r="3.6" fill="#F6E2BC"/></g>
+          <circle cx="4" cy="-9.5" r="7.2" fill="#F0D19F"/><circle cx="-1" cy="-10" r="7.8" fill="#F2D5A6"/>
+          <circle cx="-6" cy="-12" r="7.6" fill="#F6E0B8"/>
+          <path d="M-12 -11 l-2 2 M-11 -7 l-2 1 M-3 -3.5 l0 2 M5 -3.5 l1 2" stroke="#E7C58F" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M-12.5 -22 L-12 -29 L-8 -24.5Z" fill="#EDC98F"/><path d="M-11.6 -23.5 L-11.4 -27 L-9.4 -24.6Z" fill="#E9A38A"/>
+          <path d="M-6 -24 L-3.5 -30.5 L-1.8 -23.5Z" fill="#EDC98F"/><path d="M-5 -24.4 L-3.6 -28.4 L-2.8 -24.2Z" fill="#E9A38A"/>
+          <circle cx="-8" cy="-20" r="6.4" fill="#F4D9AB"/>
+          <ellipse cx="-12.4" cy="-18.3" rx="2.4" ry="1.9" fill="#FAEBCD"/>
+          <circle cx="-14.2" cy="-18.6" r="1.1" fill="#1E1E1E"/>
+          <circle cx="-10.6" cy="-21" r="1.15" fill="#1E1E1E"/><circle cx="-6.6" cy="-21.2" r="1.15" fill="#1E1E1E"/>
+          <circle cx="-10.3" cy="-21.4" r=".35" fill="#fff"/><circle cx="-6.3" cy="-21.6" r=".35" fill="#fff"/>
+          <ellipse class="tongue" cx="-12.4" cy="-15.8" rx="1" ry="1.4" fill="#E5707E"/>
+        </g></g></g>
+        <!-- Rose -->
+        <g id="rose" transform="translate(18 248)"><g id="roseFlip"><g class="bob">
+          <g class="arm arm-back"><rect x="-2.4" y="-42" width="4.8" height="16" rx="2.4" style="fill:var(--coatDark)"/><circle cx="0" cy="-26" r="2.4" fill="#EBBE9C"/></g>
+          <g class="leg leg-back"><rect x="-2.6" y="-22" width="5.2" height="18" rx="2.6" fill="#26304A"/><path d="M-3.2 -5h6.4q3.8 0 3.8 3.4v1.8h-10.2z" fill="#5E3A25"/></g>
+          <g class="leg leg-front"><rect x="-2.6" y="-22" width="5.2" height="18" rx="2.6" fill="#344062"/><path d="M-3.2 -5h6.4q3.8 0 3.8 3.4v1.8h-10.2z" fill="#7A4A2E"/><path d="M-3.2 -.6h10.2" stroke="#3A2416" stroke-width="1.2"/></g>
+          <rect x="-13" y="-42.5" width="8" height="16" rx="3.2" fill="#5E7B55"/>
+          <rect x="-13" y="-35" width="8" height="2" fill="#4A6343"/>
+          <g id="coatLong"><path d="M-7 -44.5 Q0 -47.5 7 -44.5 L9.6 -19 Q0 -16 -9.6 -19 Z" style="fill:var(--coat)"/>
+          <path d="M2 -45 L2.6 -18" stroke="rgba(128,128,128,.4)" stroke-width="1"/>
+          <path d="M4 -30 h4" stroke="rgba(128,128,128,.4)" stroke-width="1" stroke-linecap="round"/></g>
+          <g id="bomber" display="none">
+            <path d="M-7 -44.5 Q0 -47.5 7 -44.5 L8.8 -25.5 Q0 -23.8 -8.8 -25.5 Z" fill="#1F1C1A"/>
+            <rect x="-9" y="-26.6" width="18" height="3.6" rx="1.7" fill="#34302D"/>
+            <path d="M-6 -26.4v3.2M-3 -26.2v3.2M0 -26v3.2M3 -26.2v3.2M6 -26.4v3.2" stroke="#1F1C1A" stroke-width=".6"/>
+            <path d="M2 -45 L2.4 -26.5" stroke="#6A625C" stroke-width=".8"/>
+            <path d="M5.5 -42 Q7 -36 6.8 -30" stroke="rgba(255,255,255,.16)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            <path d="M3.4 -37 h3.6" stroke="#4A4440" stroke-width=".9" stroke-linecap="round"/>
+          </g>
+          <path d="M-5.2 -44.5 L-6.4 -29" stroke="#3F5A39" stroke-width="1.8" stroke-linecap="round"/>
+          <rect x="-1.8" y="-47.5" width="3.6" height="4" fill="#EBBE9C"/>
+          <g id="hoodBack" display="none"><circle cx="0.4" cy="-52.5" r="10.6" style="fill:var(--coatDark)"/></g>
+          <path d="M-8.6 -53 Q-9 -61.5 0.5 -62 Q8.2 -61.5 8.6 -54 L8.2 -43 Q4.2 -41 1 -43.5 L-3.5 -43.5 Q-7.6 -42 -9.4 -44.5 Z" fill="#6A4630"/>
+          <circle cx="1.2" cy="-52.5" r="7.8" fill="#F2CBAA"/>
+          <path d="M9.1 -54.5 Q8.6 -61 1 -61 Q-7.6 -61 -8.4 -52.5 L-8.4 -44.5 Q-5.2 -43.4 -3.2 -45.6 L-3 -51 Q-1 -56 3.2 -56.4 Q6.8 -56.4 9.1 -54.5 Z" fill="#7B5236"/>
+          <path d="M1 -61 Q2.6 -58 3.2 -56.4" stroke="#5E3E28" stroke-width=".6" fill="none"/>
+          <g id="furCollar" display="none" fill="#F1E6D2"><circle cx="-8" cy="-42.6" r="2.6"/><circle cx="-5" cy="-44" r="2.8"/><circle cx="-1.6" cy="-44.4" r="2.7"/><circle cx="2" cy="-44" r="2.5"/><circle cx="5.6" cy="-43" r="2.6"/><circle cx="8.6" cy="-42" r="2.4"/><circle cx="-3" cy="-42" r="2.3" fill="#E6D8BF"/><circle cx="3.6" cy="-41.6" r="2.3" fill="#E6D8BF"/></g>
+          <circle cx="5.4" cy="-52" r="1" fill="#2E2A26"/>
+          <circle cx="5.8" cy="-48.9" r="1.8" fill="#E99A92" opacity=".55"/>
+          <path d="M4.8 -47.3 q1.3 1.1 2.7 0" stroke="#2E2A26" stroke-width=".8" fill="none" stroke-linecap="round"/>
+          <circle cx="-2.4" cy="-47.6" r="1.1" fill="none" stroke="#D4A63A" stroke-width=".7"/>
+          <g id="hood" display="none"><path d="M-9.6 -50 Q-10.2 -64 1 -64 Q12 -64 11 -51.5 L9 -51.5 Q9.4 -60.6 1 -60.8 Q-6.8 -60.6 -7.4 -48.5 Z" style="fill:var(--coat)"/><path d="M9.3 -52 Q9 -60 1 -60.5" stroke="rgba(0,0,0,.15)" stroke-width="1" fill="none"/></g>
+          <g id="muffs" display="none"><path d="M-2 -50 Q-4.5 -63.5 2 -62.8 Q7 -62.4 8 -58" stroke="#1E1E21" stroke-width="1.7" fill="none" stroke-linecap="round"/><ellipse cx="-2" cy="-50" rx="3.3" ry="3.9" fill="#1E1E21"/><ellipse cx="-2.9" cy="-51.2" rx="1" ry="1.4" fill="#4A4A50"/></g>
+          <g id="shades" display="none"><rect x="-3.4" y="-62.8" width="5" height="2.8" rx="1.3" fill="#E7A1A6" stroke="#B9767C" stroke-width=".5"/><rect x="2.6" y="-62.4" width="5" height="2.8" rx="1.3" fill="#E7A1A6" stroke="#B9767C" stroke-width=".5"/></g>
+          <g class="arm arm-front"><rect x="-2.4" y="-42" width="4.8" height="16" rx="2.4" style="fill:var(--coat)"/><path d="M-2.4 -29 h4.8" stroke="rgba(0,0,0,.15)" stroke-width="1"/><circle cx="0" cy="-26" r="2.4" fill="#F2CBAA"/></g>
+        </g></g></g>
+        <g id="hearts"></g>
+        <g id="butterflies"></g>
+        <g id="fogLayer" opacity="0">
+          <g class="fog"><rect x="-60" y="150" width="300" height="22" rx="11" fill="#fff" opacity=".55"/><rect x="160" y="178" width="320" height="18" rx="9" fill="#fff" opacity=".5"/><rect x="-40" y="205" width="260" height="16" rx="8" fill="#fff" opacity=".4"/></g>
+          <rect width="400" height="260" fill="#F2F2EE" opacity=".25"/>
+        </g>
+        <g id="rain"></g>
+        <g id="snow"></g>
+        <g id="storm" display="none">
+          <path d="M120 40 L108 76 L118 76 L104 112" stroke="#FFF6C8" stroke-width="2.6" fill="none" class="flash" stroke-linejoin="round"/>
+          <rect width="400" height="260" fill="#fff" class="flash"/>
+        </g>
+      </svg>
+      <div class="scene-pill" id="scenePill">0 / 5 km</div>
+      <div class="scene-msg" id="sceneMsg"></div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="label" id="todayLabel">Today</div>
+          <div class="big" id="todayBig">0 <small>km</small></div>
+        </div>
+        <div style="text-align:right">
+          <div class="label">Daily target</div>
+          <div class="serif" style="font-size:20px" id="dailyTarget">5 km</div>
+        </div>
+      </div>
+      <div class="bar" id="todayBar"><i style="width:0"></i></div>
+      <div id="todayToGo" style="font-weight:800"></div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom:8px">Add to today's distance</div>
+      <form class="addrow" id="addForm" autocomplete="off">
+        <label class="kmfield"><input id="kmInput" type="text" inputmode="decimal" placeholder="0.0" aria-label="Kilometres walked"><span>km</span></label>
+        <button class="btn" type="submit">Add</button>
+      </form>
+      <div class="quick" id="quick">
+        <button type="button" data-km="0.5">+0.5</button><button type="button" data-km="1">+1</button><button type="button" data-km="2">+2</button><button type="button" data-km="5">+5</button><button type="button" data-km="0">clear</button>
+      </div>
+      <button class="undo" id="undoBtn" hidden>Undo last entry</button>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="label">This week</div>
+          <div class="big" id="weekBig">0 <small>/ 35 km</small></div>
+        </div>
+        <div id="weekBadge"></div>
+      </div>
+      <div class="bar gold" id="weekBar"><i style="width:0"></i></div>
+      <div id="paceBox"></div>
+      <div class="strip" id="strip"></div>
+      <div class="muted center" style="font-size:12px;margin-top:6px">Tap a day to view or edit its walks</div>
+    </div>
+  </section>
+
+  <!-- WEEKS -->
+  <section class="view" id="view-weeks">
+    <div class="card yearhead" id="weeksHead"></div>
+    <div id="weeksList"></div>
+  </section>
+
+  <!-- YEAR -->
+  <section class="view" id="view-year">
+    <div class="yearnav">
+      <button class="iconbtn" id="yPrev" aria-label="Previous year"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E2A26" stroke-width="2.6" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <h2 id="yTitle">2026</h2>
+      <button class="iconbtn" id="yNext" aria-label="Next year"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E2A26" stroke-width="2.6" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div id="yearBody"></div>
+  </section>
+</div>
+
+<nav class="tabs"><div class="inner">
+  <button class="on" data-tab="today">Today</button>
+  <button data-tab="weeks">Weeks</button>
+  <button data-tab="year">Year</button>
+</div></nav>
+
+<div class="backdrop" id="backdrop"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div id="sheetBody"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s);
+const STORE='roseWalks.v1', WXSTORE='roseWalks.wx';
+const LEEDS={lat:53.7997,lon:-1.5492};
+
+/* ---------- storage ---------- */
+function defaults(){return {name:'Rose',defaultGoal:35,goals:{},entries:{},sceneMode:'day'};}
+function load(){try{const s=JSON.parse(localStorage.getItem(STORE));if(s&&s.entries)return Object.assign(defaults(),s);}catch(e){}return defaults();}
+let state=load();
+function save(){try{localStorage.setItem(STORE,JSON.stringify(state));}catch(e){}}
+
+/* ---------- dates ---------- */
+const pad=n=>String(n).padStart(2,'0');
+const key=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parseKey=k=>{const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d);};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x;};
+const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate());};
+const weekStart=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x;};
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const fmtRange=ws=>{const we=addDays(ws,6);return ws.getMonth()===we.getMonth()?`${ws.getDate()} – ${we.getDate()} ${MONTHS[we.getMonth()]}`:`${ws.getDate()} ${MONTHS[ws.getMonth()]} – ${we.getDate()} ${MONTHS[we.getMonth()]}`;};
+const fmt=n=>{const r=Math.round(n*10)/10;return r.toLocaleString('en-GB',{maximumFractionDigits:1});};
+
+/* ---------- data helpers ---------- */
+const dayKm=k=>(state.entries[k]||[]).reduce((a,e)=>a+e.km,0);
+function goalFor(ws){const k=key(ws);const ks=Object.keys(state.goals).sort();if(!ks.length)return state.defaultGoal;let g=state.goals[ks[0]];for(const gk of ks){if(gk<=k)g=state.goals[gk];}return g;}
+const weekKm=ws=>{let t=0;for(let i=0;i<7;i++)t+=dayKm(key(addDays(ws,i)));return t;};
+const hit=(km,target)=>km>0&&km>=target-1e-9;
+function addEntry(k,km){(state.entries[k]=state.entries[k]||[]).push({id:Date.now()+Math.random(),t:new Date().toISOString(),km:Math.round(km*100)/100});save();}
+function removeEntry(k,id){state.entries[k]=(state.entries[k]||[]).filter(e=>e.id!==id);if(!state.entries[k].length)delete state.entries[k];save();}
+
+/* ---------- small SVG bits ---------- */
+const medalSVG=(s=24,c='#F2C14E')=>`<svg width="${s}" height="${s*1.25}" viewBox="0 0 24 30"><path d="M6.5 1h4.5l3 8.5h-4.5z" fill="#D9825B" stroke="#2E2A26" stroke-width="1"/><path d="M17.5 1H13l-3 8.5h4.5z" fill="#6E8FB0" stroke="#2E2A26" stroke-width="1"/><circle cx="12" cy="19" r="8.2" fill="${c}" stroke="#2E2A26" stroke-width="1.5"/><path d="M12 14.2l1.5 3 3.2.5-2.3 2.2.6 3.2-3-1.6-3 1.6.6-3.2-2.3-2.2 3.2-.5z" fill="#FFF6DD"/></svg>`;
+const rosetteSVG=(s=26)=>`<svg width="${s}" height="${s*1.2}" viewBox="0 0 30 36"><path d="M9 20l-4 14 5-3 3 5 2-14zM21 20l4 14-5-3-3 5-2-14z" fill="#4F6B48" stroke="#2E2A26" stroke-width="1"/><g fill="#E7A1A6" stroke="#2E2A26" stroke-width="1">${[0,45,90,135,180,225,270,315].map(a=>`<circle cx="${15+8*Math.cos(a*Math.PI/180)}" cy="${14+8*Math.sin(a*Math.PI/180)}" r="4.6"/>`).join('')}</g><circle cx="15" cy="14" r="7" fill="#F2C14E" stroke="#2E2A26" stroke-width="1.2"/><path d="M15 9.8v8.4M12 15.5l3 2.7 3-2.7" stroke="#7A5638" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>`;
+const ringSVG=f=>{const r=13,c=2*Math.PI*r;return `<svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="${r}" fill="none" stroke="#EADFCD" stroke-width="4"/><circle cx="16" cy="16" r="${r}" fill="none" stroke="#8DA47E" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(c*f).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 16 16)" ${f<=0?'opacity="0"':''}/></svg>`;};
+function wxIconSVG(kind,isDay){
+  const sun=`<circle cx="9" cy="9" r="4.5" fill="#F7C948" stroke="#2E2A26" stroke-width="1.2"/>`;
+  const moon=`<path d="M12 4a5.5 5.5 0 1 0 4 9 4.5 4.5 0 0 1-4-9z" fill="#F4EBD0" stroke="#2E2A26" stroke-width="1.2"/>`;
+  const cloud=(f='#fff')=>`<path d="M6 19h11a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.6-1A4 4 0 0 0 6 19z" fill="${f}" stroke="#2E2A26" stroke-width="1.2"/>`;
+  const drops=n=>Array.from({length:n},(_,i)=>`<path d="M${8+i*4} 21l-1 2.5" stroke="#5E8FB8" stroke-width="1.6" stroke-linecap="round"/>`).join('');
+  let s='';
+  switch(kind){
+    case 'clear':s=isDay?`<circle cx="12" cy="12" r="5.5" fill="#F7C948" stroke="#2E2A26" stroke-width="1.2"/>`:moon;break;
+    case 'partly':s=(isDay?sun:moon)+cloud();break;
+    case 'cloudy':s=cloud('#E4E7EA');break;
+    case 'fog':s=`<path d="M4 9h16M6 13h14M4 17h13" stroke="#8E959B" stroke-width="2" stroke-linecap="round"/>`;break;
+    case 'drizzle':s=cloud('#E4E7EA')+drops(2);break;
+    case 'rain':s=cloud('#C9D0D6')+drops(3);break;
+    case 'storm':s=cloud('#A9B0B8')+`<path d="M12 19l-2 3h3l-2 3" stroke="#E3A93B" stroke-width="1.6" fill="none"/>`;break;
+    case 'snow':s=cloud('#fff')+`<circle cx="9" cy="22" r="1.2" fill="#8EB4D1"/><circle cx="14" cy="22.5" r="1.2" fill="#8EB4D1"/>`;break;
+  }
+  return `<svg viewBox="0 0 24 26">${s}</svg>`;
+}
+
+/* ---------- scene ---------- */
+const SVGNS='http://www.w3.org/2000/svg';
+const scene=$('#scene'), roseEl=$('#rose'), roseFlip=$('#roseFlip'), motion=$('#motion');
+const motionLen=motion.getTotalLength();
+let roseP=0, roseRAF=0, heartTimer=0;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+
+function placeRose(p){const pt=motion.getPointAtLength(Math.max(0,Math.min(1,p))*motionLen);roseEl.setAttribute('transform',`translate(${pt.x.toFixed(2)} ${pt.y.toFixed(2)})`);}
+function walkTo(target,instant){
+  target=Math.max(0,Math.min(1,target));
+  cancelAnimationFrame(roseRAF);
+  if(target<0.999)stopHug();
+  const from=roseP,d=target-from;
+  if(instant||Math.abs(d)<0.002){roseP=target;placeRose(roseP);arrive(instant);return;}
+  stopHug();
+  roseFlip.setAttribute('transform',d<0?'scale(-1 1)':'');
+  roseEl.classList.add('walking');
+  const dur=Math.min(4200,Math.max(1100,Math.abs(d)*5000)),t0=performance.now();
+  const step=now=>{const k=Math.min(1,(now-t0)/dur);const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;roseP=from+d*e;placeRose(roseP);updateDogs(roseP);
+    if(k<1)roseRAF=requestAnimationFrame(step);else{roseEl.classList.remove('walking');roseFlip.setAttribute('transform','');arrive(false);}};
+  roseRAF=requestAnimationFrame(step);
+}
+function arrive(instant){updateDogs(roseP,instant);if(roseP>=0.999)startHug();}
+function startHug(){
+  roseEl.classList.add('hugging');
+  Object.values(dogs).forEach(d=>d.el.classList.add('cheer'));
+  if(!heartTimer){spawnHeart();heartTimer=setInterval(spawnHeart,900);}
+}
+function stopHug(){roseEl.classList.remove('hugging');Object.values(dogs).forEach(d=>d.el.classList.remove('cheer'));clearInterval(heartTimer);heartTimer=0;}
+function spawnHeart(){
+  const pt=motion.getPointAtLength(motionLen);
+  const g=document.createElementNS(SVGNS,'g');g.setAttribute('transform',`translate(${pt.x+10+rnd(-4,6)} ${pt.y-58})`);
+  const h=document.createElementNS(SVGNS,'path');h.setAttribute('d','M0 2.5C-4-.5-4.5-4-2-4.5-.8-4.7 0-3.7 0-3 0-3.7.8-4.7 2-4.5 4.5-4 4-.5 0 2.5Z');
+  h.setAttribute('fill',['#E5707E','#E7A1A6','#D9825B'][Math.floor(Math.random()*3)]);h.setAttribute('class','heart');h.style.setProperty('--dx',rnd(-10,10)+'px');
+  g.appendChild(h);$('#hearts').appendChild(g);setTimeout(()=>g.remove(),1900);
+}
+
+/* dogs */
+const dogs={
+  wilbur:{el:$('#wilbur'),at:0.5,home:{x:388,y:238},x:440,raf:0,in:false},
+  eddie:{el:$('#eddie'),at:0.75,home:{x:365,y:247},x:440,raf:0,in:false}
+};
+function updateDogs(p,instant){for(const d of Object.values(dogs)){if(p>=d.at-1e-6&&!d.in)runDog(d,true,instant);else if(p<d.at-1e-6&&d.in)runDog(d,false,instant);}}
+function runDog(d,inn,instant){
+  d.in=inn;cancelAnimationFrame(d.raf);
+  const flip=d.el.querySelector('.dflip');const from=d.x,to=inn?d.home.x:440;
+  const set=(x,hop)=>{d.x=x;d.el.setAttribute('transform',`translate(${x.toFixed(1)} ${(d.home.y-hop).toFixed(1)})`);};
+  if(instant){set(to,0);return;}
+  flip.setAttribute('transform',inn?'':'scale(-1 1)');d.el.classList.add('running');d.el.classList.remove('cheer');
+  const dur=1000,t0=performance.now();
+  const step=now=>{const k=Math.min(1,(now-t0)/dur);const e=1-Math.pow(1-k,3);set(from+(to-from)*e,Math.abs(Math.sin(k*Math.PI*6))*2.5*(1-k));
+    if(k<1)d.raf=requestAnimationFrame(step);else{d.el.classList.remove('running');flip.setAttribute('transform','');if(roseP>=0.999&&inn)d.el.classList.add('cheer');}};
+  d.raf=requestAnimationFrame(step);
+}
+
+/* static scenery */
+function buildSheep(){
+  const spots=[[88,131],[100,134.5],[252,123],[266,125],[176,137]];
+  $('#sheep').innerHTML=spots.map(([x,y])=>`<g transform="translate(${x} ${y})"><path d="M-2.5 1.5v2.4M2 1.5v2.4" stroke="#3A3530" stroke-width=".9"/><ellipse rx="4.4" ry="2.9" fill="#FBF8F2"/><ellipse cx="4.3" cy="-.6" rx="1.5" ry="1.3" fill="#3A3530"/></g>`).join('');
+}
+let seasonPreview=null;
+function season(){if(seasonPreview)return seasonPreview;const m=new Date().getMonth();return m>=2&&m<=4?'spring':m>=5&&m<=7?'summer':m>=8&&m<=10?'autumn':'winter';}
+function buildTree(snowy){
+  const s=season();
+  const pal={spring:['#9CC56F','#8DBA62','#B2D486','#A4CB79','#8AB65E'],summer:['#5E8F4E','#6FA25A','#4F7F43','#679B54','#58894A'],autumn:['#D9824A','#E3A93B','#C1603A','#E8B860','#B5562F'],winter:[]}[s];
+  const blobs=[[342,116,34],[315,132,22],[369,130,24],[328,96,22],[357,96,22],[342,82,18]];
+  let h='';
+  if(pal.length){blobs.forEach(([x,y,r],i)=>{h+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${pal[i%pal.length]}"/>`;});
+    h+=`<circle cx="330" cy="98" r="9" fill="rgba(255,255,255,.14)"/><circle cx="316" cy="128" r="6" fill="rgba(255,255,255,.12)"/>`;
+    if(s==='spring')for(let i=0;i<18;i++){const a=rnd(0,Math.PI*2),r=rnd(4,38);h+=`<circle cx="${342+Math.cos(a)*r*1.1}" cy="${112+Math.sin(a)*r*.8}" r="2" fill="#F6C6CF"/>`;}
+    if(s==='summer')for(let i=0;i<6;i++){h+=`<circle cx="${rnd(312,372)}" cy="${rnd(96,140)}" r="1.8" fill="#C7DA88"/>`;}
+  }else{
+    h=`<g stroke="#7A5638" stroke-linecap="round" fill="none" stroke-width="1.4"><path d="M312 134 l-8 -10 M312 134 l-2 -14 M374 130 l8 -10 M374 130 l2 -13 M343 98 l-5 -12 M343 98 l6 -11 M326 88 l-6 -6 M360 86 l6 -6 M302 140 l-7 -4 M388 142 l7 -3"/></g>`;
+    h+=`<g transform="translate(343 104)"><ellipse rx="7" ry="3.4" fill="#8A6A48"/><path d="M-6-1h12M-5 1h10" stroke="#6A4E34" stroke-width=".8"/></g>`;
+    if(snowy)h+=`<g stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"><path d="M314 133 Q 326 146 337 160"/><path d="M349 157 Q 361 143 372 131"/><path d="M341 130 Q 341 112 342 100"/><path d="M337 102 h12"/></g>`;
+  }
+  $('#canopy').innerHTML=h;
+  let lv='';
+  if(s==='autumn')for(let i=0;i<6;i++)lv+=`<ellipse class="leaf" cx="${rnd(315,375)}" cy="${rnd(130,150)}" rx="2.6" ry="1.5" fill="${pal[i%pal.length]}" style="animation-delay:${(i*1.2).toFixed(1)}s"/>`;
+  $('#leaves').innerHTML=lv;
+  $('#ground').setAttribute('fill',{spring:'#93B874',summer:'#8DAF72',autumn:'#9DAE6C',winter:'#A2AD8E'}[s]);
+  $('#midHill').setAttribute('fill',{spring:'#ACC88E',summer:'#A6BF8A',autumn:'#B6BC86',winter:'#B4BBA2'}[s]);
+}
+function buildPlants(){
+  const s=season();
+  const tuft=(x,y,c='#5E7B4C')=>`<g transform="translate(${x} ${y})"><g class="sway"><path d="M0 0Q-2-6-5-9M0 0Q0-7 1-11M0 0Q2-5 5-8" stroke="${c}" stroke-width="1.5" stroke-linecap="round" fill="none"/></g></g>`;
+  const fern=(x,y)=>`<g transform="translate(${x} ${y})"><g class="sway" stroke="#4F7A45" stroke-width="1.3" fill="none" stroke-linecap="round"><path d="M0 0Q-2-8-9-12"/><path d="M-3-5l-3 1M-5-8l-3 0M-7-10l-1-2M-2-4l0-3M-4-7l1-3"/><path d="M1 0Q4-8 10-10"/><path d="M4-5l3 1M6-7l2-1M3-4l0-3M6-7l0-3"/></g></g>`;
+  const flower={
+    spring:(x,y)=>`<g transform="translate(${x} ${y})"><g class="sway"><path d="M0 0V-13" stroke="#5E8A49" stroke-width="1.3"/><path d="M0-2Q-4-6-3-10" stroke="#6E9A55" stroke-width="1.6" fill="none"/>${[0,72,144,216,288].map(a=>`<ellipse cx="${2.4*Math.cos(a*Math.PI/180)}" cy="${-14+2.4*Math.sin(a*Math.PI/180)}" rx="1.8" ry="1.2" transform="rotate(${a} ${2.4*Math.cos(a*Math.PI/180)} ${-14+2.4*Math.sin(a*Math.PI/180)})" fill="#F7D547"/>`).join('')}<circle cy="-14" r="1.5" fill="#E8902E"/></g></g>`,
+    summer:(x,y)=>`<g transform="translate(${x} ${y})"><g class="sway"><path d="M0 0V-24" stroke="#5E8A49" stroke-width="1.3"/>${[0,1,2,3,4,5].map(i=>`<ellipse cx="${i%2?2.2:-2.2}" cy="${-8-i*2.7}" rx="2" ry="1.6" fill="${i<2?'#C86C9C':'#D98CB3'}"/>`).join('')}</g></g>`,
+    autumn:(x,y)=>`<g transform="translate(${x} ${y})"><rect x="-1.3" y="-6" width="2.6" height="6" rx="1" fill="#F4E9D6"/><path d="M-5.5-5.5Q0-12 5.5-5.5Z" fill="#D2483A"/><circle cx="-2" cy="-7.4" r=".8" fill="#fff"/><circle cx="1.6" cy="-8.2" r=".8" fill="#fff"/><circle cx="3" cy="-6.3" r=".6" fill="#fff"/></g>`,
+    winter:(x,y)=>`<g transform="translate(${x} ${y})"><path d="M-6-3q3-4 6-1q3-3 6 1q-3 3-6 1q-3 2-6-1z" fill="#2F5A3A"/><circle cx="-1" cy="-5" r="1.4" fill="#C9302C"/><circle cx="1.4" cy="-5.6" r="1.4" fill="#C9302C"/></g>`
+  }[s];
+  const daisy=(x,y)=>`<g transform="translate(${x} ${y})"><g class="sway"><path d="M0 0V-7" stroke="#5E8A49" stroke-width="1"/><circle cy="-8" r="2.2" fill="#fff"/><circle cy="-8" r=".9" fill="#F2C14E"/></g></g>`;
+  let h='';
+  [[6,260],[48,262],[150,262],[214,260],[292,262],[330,252],[396,255]].forEach(([x,y])=>h+=tuft(x,y));
+  [[28,262],[248,262],[384,262]].forEach(([x,y])=>h+=fern(x,y));
+  [[12,256],[96,262],[186,262],[270,262],[310,250]].forEach(([x,y])=>h+=flower(x,y));
+  if(s!=='winter')[[66,262],[136,261],[230,262],[350,257]].forEach(([x,y])=>h+=daisy(x,y));
+  h+=[[40,214],[210,205],[268,200],[160,211]].map(([x,y])=>tuft(x,y,'#6E8A5A')).join('');
+  $('#plants').innerHTML=h;
+}
+function buildStars(){let h='';for(let i=0;i<30;i++)h+=`<circle class="twinkle" cx="${rnd(0,400).toFixed(0)}" cy="${rnd(4,120).toFixed(0)}" r="${rnd(.5,1.3).toFixed(1)}" fill="#FFF8E1" style="animation-delay:${rnd(0,2.5).toFixed(1)}s"/>`;$('#stars').innerHTML=h;}
+function cloudShape(f,sh){return `<ellipse cx="0" cy="11" rx="30" ry="5" fill="${sh}" opacity=".6"/><circle cx="-14" cy="2" r="11" fill="${f}"/><circle cx="2" cy="-4" r="15" fill="${f}"/><circle cx="17" cy="3" r="10" fill="${f}"/><rect x="-26" y="2" width="52" height="11" rx="5.5" fill="${f}"/>`;}
+function buildClouds(n,f,sh,speed){
+  let h='';for(let i=0;i<n;i++){const y=rnd(18,100),s=rnd(.55,1.15),d=rnd(70,130)/speed;
+    h+=`<g transform="translate(0 ${y.toFixed(0)})"><g class="drift" style="animation-duration:${d.toFixed(0)}s;animation-delay:-${rnd(0,d).toFixed(0)}s"><g transform="scale(${s.toFixed(2)})">${cloudShape(f,sh)}</g></g></g>`;}
+  $('#clouds').innerHTML=h;
+}
+function buildBirds(n){let h='';for(let i=0;i<n;i++){const d=rnd(22,34);h+=`<g transform="translate(0 ${rnd(40,95).toFixed(0)}) scale(${rnd(.7,1.1).toFixed(2)})"><g class="fly" style="animation-duration:${d.toFixed(0)}s;animation-delay:-${rnd(0,d).toFixed(0)}s"><path class="flap" d="M-5 0Q-2.5-3 0 0Q2.5-3 5 0" stroke="#3A3530" stroke-width="1.3" fill="none" stroke-linecap="round" style="animation-delay:${rnd(0,.3).toFixed(2)}s"/></g></g>`;}$('#birds').innerHTML=h;}
+function buildButterflies(on){
+  if(!on){$('#butterflies').innerHTML='';return;}
+  const b=(x,y,c,delay)=>`<g transform="translate(${x} ${y})"><g class="flutter" style="animation-delay:${delay}s"><g class="wing"><path d="M0 0C-5-6-8-2-5 1C-7 4-3 5 0 1Z" fill="${c}" stroke="#2E2A26" stroke-width=".5"/><path d="M0 0C5-6 8-2 5 1C7 4 3 5 0 1Z" fill="${c}" stroke="#2E2A26" stroke-width=".5"/></g><path d="M0-1.5v4" stroke="#2E2A26" stroke-width="1" stroke-linecap="round"/></g></g>`;
+  $('#butterflies').innerHTML=b(70,205,'#F3D36B',0)+b(220,190,'#F2B5C6',-6)+b(150,170,'#FFFFFF',-3);
+}
+function buildRain(heavy){
+  const layer=(n,cls,stroke,op)=>{let l='';for(let i=0;i<n;i++){const x=rnd(-10,410),y=rnd(0,260);for(const off of [0,-260])l+=`<path d="M${x.toFixed(0)} ${(y+off).toFixed(0)}l-2.5 9" />`;}return `<g class="${cls}" stroke="${stroke}" stroke-width="1.1" stroke-linecap="round" opacity="${op}">${l}</g>`;};
+  $('#rain').innerHTML=layer(heavy?60:28,'fallA','#E8F0F6',.85)+layer(heavy?40:18,'fallB','#C8D6E2',.6);
+}
+function buildSnow(){
+  const layer=(n,cls,r)=>{let l='';for(let i=0;i<n;i++){const x=rnd(0,400),y=rnd(0,260);for(const off of [0,-260])l+=`<circle cx="${x.toFixed(0)}" cy="${(y+off).toFixed(0)}" r="${r}"/>`;}return `<g class="snowsway"><g class="${cls}" fill="#fff">${l}</g></g>`;};
+  $('#snow').innerHTML=layer(45,'snowA',1.6)+layer(35,'snowB',1);
+}
+
+/* weather */
+const WX_LABEL={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Freezing fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',56:'Freezing drizzle',57:'Freezing drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',66:'Freezing rain',67:'Freezing rain',71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',80:'Light showers',81:'Showers',82:'Heavy showers',85:'Snow showers',86:'Snow showers',95:'Thunderstorm',96:'Thunder & hail',99:'Thunder & hail'};
+function kindOf(code){if(code===0)return 'clear';if(code===1||code===2)return 'partly';if(code===3)return 'cloudy';if(code===45||code===48)return 'fog';if(code>=51&&code<=57)return 'drizzle';if((code>=61&&code<=67)||(code>=80&&code<=82))return 'rain';if((code>=71&&code<=77)||code===85||code===86)return 'snow';if(code>=95)return 'storm';return 'cloudy';}
+/* Phrases & journeys: defaults below, replaced by words.txt when it loads */
+const TEXT={clear:['Glorious out there — sunnies on!'],partly:['Sunny spells — lovely walking weather.'],cloudy:['Classic grey Yorkshire sky.'],fog:['Misty moors kind of day.'],drizzle:['Proper Leeds drizzle — hood up!'],rain:['Puddle-jumping weather!'],storm:['Stormy! Maybe a short one today.'],snow:['Snow! Wrap up warm.'],night:['Evening stroll under the stars.'],
+  started:['Lovely — into your stride now.'],wilbur:['Wilbur’s spotted you! Keep going.'],eddie:['Nearly there — Eddie’s come to cheer you on!'],hug_day:['Tree hugged! Daily goal done 🌳'],hug_week:['Weekly goal smashed — big tree hug! 🌳'],
+  journeys:[['Leeds to York',40],['Leeds to Manchester',70],['the whole Dales Way',127],['the Leeds & Liverpool Canal',204],['the Coast to Coast walk',300],['the Pennine Way',431],["Land's End to John o'Groats",1400]]};
+async function loadWords(){
+  try{
+    const r=await fetch('words.txt',{cache:'no-cache'});if(!r.ok)return;
+    const out={};let sec=null;
+    for(let line of (await r.text()).split(/\r?\n/)){
+      line=line.trim();if(!line||line.startsWith('#'))continue;
+      const m=line.match(/^\[(.+)\]$/);if(m){sec=m[1].trim().toLowerCase();out[sec]=out[sec]||[];continue;}
+      if(!sec)continue;
+      if(sec==='journeys'){const [n,km]=line.split('|').map(s=>s.trim());const v=parseFloat(km);if(n&&v>0)out[sec].push([n,v]);}
+      else out[sec].push(line);
+    }
+    for(const k in out)if(out[k].length)TEXT[k]=out[k];
+    TEXT.journeys.sort((a,b)=>a[1]-b[1]);
+    renderMsg();if($('#view-year').classList.contains('on'))renderYear();
+  }catch(e){}
+}
+let liveWx=null, previewIdx=-1;
+const PREVIEW=[{kind:'clear',isDay:true,temp:21},{kind:'partly',isDay:true,temp:15},{kind:'cloudy',isDay:true,temp:10},{kind:'fog',isDay:true,temp:6},{kind:'drizzle',isDay:true,temp:9},{kind:'rain',isDay:true,temp:8,heavy:true},{kind:'storm',isDay:true,temp:12},{kind:'snow',isDay:true,temp:-1},{kind:'clear',isDay:false,temp:5}];
+
+function applyWeather(w){
+  const k=w.kind, day=w.isDay!==false, windy=(w.wind||0)>28;
+  const skies={clear:['#7FBCE3','#DCEFF6'],partly:['#94C3E0','#E3EEF0'],cloudy:['#AEB9C2','#E1E3DF'],fog:['#CFD2CF','#ECEBE5'],drizzle:['#93A0AB','#CDD3D4'],rain:['#7F8D99','#C3CACC'],storm:['#566170','#959EA6'],snow:['#BCC8D2','#EDF1F3']};
+  let [s1,s2]=skies[k]||skies.cloudy;
+  if(!day){s1='#1C2546';s2=k==='clear'||k==='partly'?'#4C5B86':'#3E475E';}
+  $('#sky1').setAttribute('stop-color',s1);$('#sky2').setAttribute('stop-color',s2);
+  $('#moonCut').setAttribute('fill',s1);
+  $('#sun').style.display=day&&(k==='clear'||k==='partly')?'':'none';
+  $('#moon').style.display=!day&&(k==='clear'||k==='partly'||k==='cloudy')?'':'none';
+  $('#stars').style.display=!day&&(k==='clear'||k==='partly')?'':'none';
+  const cl={clear:[1,'#fff','#E6EEF2'],partly:[4,'#fff','#E2EAEE'],cloudy:[6,'#F0F2F3','#C9D0D5'],fog:[4,'#F2F2EF','#D9DBD7'],drizzle:[6,'#DCE1E5','#AEB8C0'],rain:[7,'#C3CBD2','#8E99A3'],storm:[7,'#8C95A0','#5F6873'],snow:[6,'#F4F6F8','#C9D2DA']}[k];
+  let cf=cl[1],cs=cl[2];if(!day){cf=k==='clear'?'#5A6790':'#6C7488';cs='#3A4462';}
+  buildClouds(k==='clear'&&!day?0:cl[0],cf,cs,windy?2.2:1);
+  buildBirds(day&&!['rain','storm','snow','fog'].includes(k)?3:0);
+  buildButterflies(day&&['clear','partly'].includes(k)&&(w.temp==null||w.temp>=11)&&season()!=='winter');
+  const wet=['drizzle','rain','storm'].includes(k);
+  if(wet)buildRain(k!=='drizzle'||w.heavy);else $('#rain').innerHTML='';
+  if(k==='snow')buildSnow();else $('#snow').innerHTML='';
+  $('#snowCover').setAttribute('opacity',k==='snow'?1:0);
+  $('#fogLayer').setAttribute('opacity',k==='fog'?1:0);
+  $('#puddles').setAttribute('opacity',wet?1:0);
+  $('#storm').setAttribute('display',k==='storm'?'':'none');
+  $('#nightTint').setAttribute('opacity',day?0:1);
+  scene.classList.toggle('windy',windy||k==='storm');
+  // outfit
+  const hood=wet, temp=w.temp==null?12:w.temp;
+  const cold=k==='snow'||temp<7;            // winter outfit: black coat, fur collar, ear muffs
+  const muffs=!hood&&cold;
+  const shades=!hood&&!cold&&day&&(k==='clear'||k==='partly')&&temp>=12;
+  $('#hood').setAttribute('display',hood?'':'none');$('#hoodBack').setAttribute('display',hood?'':'none');
+  $('#muffs').setAttribute('display',muffs?'':'none');$('#shades').setAttribute('display',shades?'':'none');
+  // winter (cold & not raining): black leather bomber + fur collar; otherwise the black raincoat
+  const bomber=cold&&!hood;
+  $('#furCollar').setAttribute('display',bomber?'':'none');
+  $('#bomber').setAttribute('display',bomber?'':'none');$('#coatLong').setAttribute('display',bomber?'none':'');
+  roseEl.style.setProperty('--coat',bomber?'#1F1C1A':'#2A2A2E');roseEl.style.setProperty('--coatDark',bomber?'#141210':'#1B1B1E');
+  // chip
+  $('#wxIcon').innerHTML=wxIconSVG(k,day);
+  const label=w.preview?`Preview: ${k}${day?'':' (night)'} · tap`:`Leeds · ${Math.round(w.temp)}° · ${WX_LABEL[w.code]||k}${w.max!=null?` · H${Math.round(w.max)}° L${Math.round(w.min)}°`:''}`;
+  $('#wxText').textContent=label;
+  currentWx=w;renderMsg();
+}
+let currentWx={kind:'cloudy',isDay:true,temp:10};
+async function fetchWeather(force){
+  try{const c=JSON.parse(localStorage.getItem(WXSTORE)||'null');if(c&&!force&&Date.now()-c.at<30*60e3){liveWx=c.data;if(previewIdx<0)applyWeather(liveWx);return;}}catch(e){}
+  try{
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${LEEDS.lat}&longitude=${LEEDS.lon}&current=temperature_2m,weather_code,is_day,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Europe%2FLondon&forecast_days=1`;
+    const r=await fetch(url);if(!r.ok)throw new Error(r.status);const j=await r.json();
+    liveWx={code:j.current.weather_code,kind:kindOf(j.current.weather_code),temp:j.current.temperature_2m,isDay:!!j.current.is_day,wind:j.current.wind_speed_10m,max:j.daily.temperature_2m_max[0],min:j.daily.temperature_2m_min[0],heavy:[65,82].includes(j.current.weather_code)};
+    try{localStorage.setItem(WXSTORE,JSON.stringify({at:Date.now(),data:liveWx}));}catch(e){}
+    if(previewIdx<0)applyWeather(liveWx);
+  }catch(e){
+    if(!liveWx&&previewIdx<0){const h=new Date().getHours();applyWeather({kind:'cloudy',isDay:h>=7&&h<18,temp:10,code:3});$('#wxText').textContent='Leeds · weather offline';}
+  }
+}
+$('#wxChip').addEventListener('click',()=>{
+  previewIdx++;
+  if(previewIdx>=PREVIEW.length){previewIdx=-1;if(liveWx)applyWeather(liveWx);else fetchWeather(true);toast('Back to live Leeds weather');return;}
+  applyWeather(Object.assign({preview:true},PREVIEW[previewIdx]));
+});
+
+/* ---------- UI rendering ---------- */
+let lastMsgKey='';
+function progress(){
+  const t=today(),ws=weekStart(t),goal=goalFor(ws),daily=goal/7;
+  return state.sceneMode==='week'?Math.min(1,weekKm(ws)/goal):Math.min(1,dayKm(key(t))/daily);
+}
+function renderMsg(){
+  const p=progress();
+  const w=currentWx, day=w.isDay!==false;
+  let m;
+  const wxText=(day?TEXT[w.kind]:TEXT.night)||TEXT.cloudy;
+  if(p>=0.999)m=pick(state.sceneMode==='week'?TEXT.hug_week:TEXT.hug_day,'hug'+state.sceneMode);
+  else if(p>=0.75)m=pick(TEXT.eddie,'eddie');
+  else if(p>=0.5)m=pick(TEXT.wilbur,'wilbur');
+  else if(p>0)m=pick([...wxText,...TEXT.started],'mid'+w.kind+day);
+  else m=pick(wxText,'start'+w.kind+day);
+  $('#sceneMsg').textContent=m;
+}
+const picked={};
+function pick(arr,k){if(!(k in picked))picked[k]=Math.floor(Math.random()*arr.length);return arr[picked[k]%arr.length];}
+
+function greet(){const h=new Date().getHours();const g=h<12?'Morning':h<17?'Afternoon':'Evening';$('#greet').textContent=`${g}, Rose`;
+  const d=new Date();$('#dateLine').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});}
+
+function renderToday(animate){
+  greet();
+  const t=today(),tk=key(t),ws=weekStart(t),goal=goalFor(ws),daily=goal/7;
+  const km=dayKm(tk),wk=weekKm(ws);
+  $('#todayBig').innerHTML=`${fmt(km)} <small>km</small>`;
+  $('#dailyTarget').textContent=`${fmt(daily)} km`;
+  $('#todayBar i').style.width=Math.min(100,km/daily*100)+'%';
+  const left=daily-km;
+  $('#todayToGo').innerHTML=left>0.0001?`<span style="color:var(--terra)">${fmt(left)} km</span> still to go today`:`${medalSVG(18)} Daily medal earned${km-daily>0.05?` · +${fmt(km-daily)} km extra`:''}`;
+  $('#weekBig').innerHTML=`${fmt(wk)} <small>/ ${fmt(goal)} km</small>`;
+  $('#weekBar i').style.width=Math.min(100,wk/goal*100)+'%';
+  $('#weekBadge').innerHTML=wk>=goal?rosetteSVG(30):'';
+  // pace
+  const dayIdx=(new Date().getDay()+6)%7;
+  const expected=goal*(dayIdx+1)/7, diff=wk-expected;
+  const daysLeft=6-dayIdx, remaining=Math.max(0,goal-wk);
+  let pace;
+  if(wk>=goal)pace=`<div class="pace ahead"><span class="dot">★</span><div><b>Weekly goal achieved!</b> ${wk-goal>0.05?`${fmt(wk-goal)} km over target.`:''} Everything else is a bonus.</div></div>`;
+  else if(diff>=0)pace=`<div class="pace ahead"><span class="dot">↑</span><div><b>You’re beating your target</b> — ${fmt(diff)} km ahead of pace this week. ${fmt(remaining)} km left.</div></div>`;
+  else pace=`<div class="pace behind"><span class="dot">→</span><div><b>${fmt(-diff)} km behind pace</b> for today. ${daysLeft>0?`About ${fmt(remaining/(daysLeft+ (km<daily?1:0) || 1))} km a day gets you there.`:`${fmt(remaining)} km to finish the week strong.`}</div></div>`;
+  $('#paceBox').innerHTML=pace;
+  // strip
+  let h='';
+  for(let i=0;i<7;i++){const d=addDays(ws,i),k=key(d),dk=dayKm(k),fut=d>t,isT=k===tk,ok=hit(dk,daily);
+    h+=`<button class="day${isT?' today':''}${fut?' future':''}" data-day="${k}" ${fut?'disabled':''}><span class="dname">${DAYS[i][0]}</span><span class="ring">${ok?`<span class="${animate&&isT?'medal-pop':''}">${medalSVG(24)}</span>`:ringSVG(Math.min(1,dk/daily))}</span><span class="dkm">${dk?fmt(dk):'–'}</span></button>`;}
+  $('#strip').innerHTML=h;
+  $('#undoBtn').hidden=!(state.entries[tk]&&state.entries[tk].length);
+  $('#todayLabel').textContent='Today';
+  // scene
+  const p=progress();
+  const sw=state.sceneMode==='week';
+  $('#scenePill').textContent=sw?`Week · ${fmt(wk)} / ${fmt(goal)} km`:`Today · ${fmt(km)} / ${fmt(daily)} km`;
+  walkTo(p,!animate);
+  renderMsg();
+}
+
+function weeksRange(){
+  const ks=Object.keys(state.entries).sort();
+  const thisW=weekStart(today());
+  let start=ks.length?weekStart(parseKey(ks[0])):thisW;if(start>thisW)start=thisW;
+  const out=[];for(let w=thisW;w>=start;w=addDays(w,-7))out.push(w);return out;
+}
+function yearKm(y){let t=0;for(const k in state.entries)if(k.startsWith(y+'-'))t+=dayKm(k);return t;}
+function renderWeeks(){
+  const t=today(),y=t.getFullYear(),yk=yearKm(y);
+  let weeksHit=0,medals=0;
+  for(const k in state.entries){if(!k.startsWith(y+'-'))continue;const d=parseKey(k);if(hit(dayKm(k),goalFor(weekStart(d))/7))medals++;}
+  const weeks=weeksRange();
+  weeks.forEach(ws=>{if(ws.getFullYear()===y&&weekKm(ws)>=goalFor(ws))weeksHit++;});
+  $('#weeksHead').innerHTML=`<div class="label">${y} so far</div><div class="big">${fmt(yk)}<small> km</small></div><div class="medals" style="justify-content:center;margin-top:12px"><span class="badge">${medalSVG(16)} ${medals} daily medal${medals===1?'':'s'}</span><span class="badge">${rosetteSVG(16)} ${weeksHit} week${weeksHit===1?'':'s'} smashed</span></div>`;
+  let h='',lastY=null;
+  weeks.forEach((ws,idx)=>{
+    const goal=goalFor(ws),daily=goal/7,tot=weekKm(ws),isCur=idx===0;
+    const yr=addDays(ws,6).getFullYear();
+    if(yr!==lastY&&lastY!==null)h+=`<h2 class="section-title">${yr}</h2>`;lastY=yr;
+    const days=[...Array(7)].map((_,i)=>{const d=addDays(ws,i);return {d,km:dayKm(key(d)),fut:d>t};});
+    const max=Math.max(daily*1.4,...days.map(x=>x.km));
+    const m=days.filter(x=>hit(x.km,daily)).length;
+    h+=`<div class="card weekcard"><div class="head"><h3>${isCur?'This week':fmtRange(ws)}</h3><span class="tot">${fmt(tot)} / ${fmt(goal)} km</span></div>
+      ${isCur?`<div class="muted" style="font-size:13px;font-weight:700">${fmtRange(ws)}</div>`:''}
+      <div class="bar gold"><i style="width:${Math.min(100,tot/goal*100)}%"></i></div>
+      <div class="minibars">${days.map((x,i)=>`<div class="b${hit(x.km,daily)?' hit':''}" style="${x.fut?'opacity:.35':''}"><i style="height:${Math.max(3,x.km/max*44)}px"></i><span>${DAYS[i][0]}</span></div>`).join('')}</div>
+      <div class="medals">${m?`<span class="badge">${medalSVG(16)} ×${m}</span>`:'<span>No medals yet</span>'}${tot>=goal?`<span class="badge">${rosetteSVG(16)} Goal smashed</span>`:(isCur?`<span>${fmt(goal-tot)} km to go</span>`:`<span>${Math.round(tot/goal*100)}% of goal</span>`)}</div></div>`;
+  });
+  $('#weeksList').innerHTML=h;
+}
+
+let yearSel=new Date().getFullYear();
+function renderYear(){
+  const y=yearSel,t=today();$('#yTitle').textContent=y;
+  const months=Array(12).fill(0);let total=0,active=0,medals=0,bestDay=0,bestDayK=null;
+  for(const k in state.entries){if(!k.startsWith(y+'-'))continue;const km=dayKm(k);if(km<=0)continue;const d=parseKey(k);months[d.getMonth()]+=km;total+=km;active++;
+    if(hit(km,goalFor(weekStart(d))/7))medals++;if(km>bestDay){bestDay=km;bestDayK=k;}}
+  // streak
+  let streak=0,best=0;const end=y===t.getFullYear()?t:new Date(y,11,31);
+  for(let d=new Date(y,0,1);d<=end;d=addDays(d,1)){if(hit(dayKm(key(d)),goalFor(weekStart(d))/7)){streak++;best=Math.max(best,streak);}else if(key(d)!==key(t))streak=0;}
+  // weeks
+  let bestWeek=0,weeksHit=0;for(let w=weekStart(new Date(y,0,1));w<=end;w=addDays(w,7)){const km=weekKm(w);if(addDays(w,3).getFullYear()!==y)continue;bestWeek=Math.max(bestWeek,km);if(km>=goalFor(w))weeksHit++;}
+  const maxM=Math.max(1,...months);
+  const chart=`<svg viewBox="0 0 336 150" width="100%">${months.map((v,i)=>{const h=v/maxM*104,x=6+i*27.5;const cur=y===t.getFullYear()&&i===t.getMonth();return `<rect x="${x}" y="${118-h}" width="19" height="${Math.max(h,2)}" rx="5" fill="${cur?'#E3A93B':'#8DA47E'}" stroke="#2E2A26" stroke-width="1.2"/>${v?`<text x="${x+9.5}" y="${112-h}" text-anchor="middle" font-size="9" font-weight="800" fill="#6E655B" font-family="Nunito">${Math.round(v)}</text>`:''}<text x="${x+9.5}" y="136" text-anchor="middle" font-size="11" font-weight="800" fill="#2E2A26" font-family="Nunito">${MONTHS[i][0]}</text>`;}).join('')}<line x1="0" y1="118.6" x2="336" y2="118.6" stroke="#2E2A26" stroke-width="1.2"/></svg>`;
+  const JOURNEYS=TEXT.journeys;const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let done=null,next=JOURNEYS[0];for(const j of JOURNEYS){if(total>=j[1])done=j;else{next=j;break;}}if(done&&done===JOURNEYS[JOURNEYS.length-1])next=null;
+  if(done)done=[esc(done[0]),done[1]];if(next)next=[esc(next[0]),next[1]];
+  const journey=total>0?`<div class="card journey"><div class="label" style="margin-bottom:6px">How far is that?</div>${done?`You’ve walked further than <b>${done[0]}</b> (≈${done[1]} km)! `:''}${next?`Next up: <b>${next[0]}</b> — ≈${next[1]} km.<div class="bar"><i style="width:${Math.min(100,total/next[1]*100)}%"></i></div><span class="muted">${fmt(next[1]-total)} km to go</span>`:'Absolute legend. 🏴'}</div>`:'';
+  $('#yearBody').innerHTML=`<div class="card yearhead"><div class="label">Total distance in ${y}</div><div class="big">${fmt(total)}<small> km</small></div><div class="muted" style="margin-top:8px;font-weight:700">${active} walking day${active===1?'':'s'}</div></div>
+    <div class="card"><div class="label" style="margin-bottom:6px">Month by month (km)</div>${chart}</div>
+    ${journey}
+    <div class="statgrid">
+      <div class="stat"><span class="label">Daily medals</span><b>${medals}</b></div>
+      <div class="stat"><span class="label">Weeks smashed</span><b>${weeksHit}</b></div>
+      <div class="stat"><span class="label">Best streak</span><b>${best} day${best===1?'':'s'}</b></div>
+      <div class="stat"><span class="label">Best week</span><b>${fmt(bestWeek)} km</b></div>
+      <div class="stat"><span class="label">Longest day</span><b>${fmt(bestDay)} km</b>${bestDayK?`<span class="muted" style="font-size:12px;font-weight:700">${parseKey(bestDayK).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>`:''}</div>
+      <div class="stat"><span class="label">Daily average</span><b>${fmt(active?total/active:0)} km</b><span class="muted" style="font-size:12px;font-weight:700">on walking days</span></div>
+    </div>`;
+  $('#yNext').style.visibility=y>=t.getFullYear()?'hidden':'visible';
+}
+$('#yPrev').onclick=()=>{yearSel--;renderYear();};
+$('#yNext').onclick=()=>{yearSel++;renderYear();};
+
+/* ---------- actions ---------- */
+function parseKm(v){const n=parseFloat(String(v).replace(',','.'));return isFinite(n)?n:NaN;}
+function celebrateCheck(before){
+  const t=today(),ws=weekStart(t),goal=goalFor(ws),daily=goal/7;
+  const nowDay=dayKm(key(t)),nowWeek=weekKm(ws);
+  if(nowWeek>=goal&&before.week<goal){toast(`${rosetteSVG(20)} Weekly goal smashed!`);confetti(60);}
+  else if(hit(nowDay,daily)&&!hit(before.day,daily)){toast(`${medalSVG(18)} Daily medal earned!`);confetti(30);}
+}
+function snapshot(){const t=today();return {day:dayKm(key(t)),week:weekKm(weekStart(t))};}
+$('#addForm').addEventListener('submit',e=>{
+  e.preventDefault();const v=parseKm($('#kmInput').value);
+  if(!(v>0)){shake($('.kmfield'));return;}
+  if(v>100){toast('That’s a long way! Max 100 km at once');return;}
+  const before=snapshot();addEntry(key(today()),v);$('#kmInput').value='';$('#kmInput').blur();
+  renderToday(true);celebrateCheck(before);
+});
+$('#quick').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const inc=parseFloat(b.dataset.km);const cur=parseKm($('#kmInput').value)||0;$('#kmInput').value=inc===0?'':fmt(cur+inc).replace(/,/g,'');});
+$('#undoBtn').onclick=()=>{const k=key(today());const arr=state.entries[k];if(!arr||!arr.length)return;const last=arr[arr.length-1];removeEntry(k,last.id);renderToday(true);toast(`Removed ${fmt(last.km)} km`);};
+document.querySelector('.seg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;state.sceneMode=b.dataset.mode;save();document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b));renderToday(true);});
+$('#strip').addEventListener('click',e=>{const b=e.target.closest('.day');if(b&&!b.disabled)openDay(b.dataset.day);});
+function shake(el){el.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:280});}
+
+/* tabs */
+document.querySelector('nav.tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;showTab(b.dataset.tab);});
+function showTab(tab){document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x.dataset.tab===tab));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='view-'+tab));
+  if(tab==='weeks')renderWeeks();if(tab==='year'){yearSel=new Date().getFullYear();renderYear();}window.scrollTo({top:0});}
+
+/* sheet */
+function openSheet(html){$('#sheetBody').innerHTML=html;document.body.classList.add('sheet-open');}
+function closeSheet(){document.body.classList.remove('sheet-open');}
+$('#backdrop').onclick=closeSheet;
+
+function openDay(k){
+  const d=parseKey(k),goal=goalFor(weekStart(d)),daily=goal/7;
+  const render=()=>{
+    const list=state.entries[k]||[],km=dayKm(k);
+    openSheet(`<h2>${d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</h2>
+      <p>${fmt(km)} km of ${fmt(daily)} km ${hit(km,daily)?'— medal earned! '+medalSVG(16):''}</p>
+      ${list.length?`<ul class="entries">${list.map(e=>`<li><span>${new Date(e.t).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})} · ${fmt(e.km)} km</span><button data-del="${e.id}">Remove</button></li>`).join('')}</ul>`:'<div class="empty">No walks logged this day.</div>'}
+      <form class="addrow" id="dayForm" style="margin-bottom:14px"><label class="kmfield"><input id="dayKm" type="text" inputmode="decimal" placeholder="Add km"><span>km</span></label><button class="btn" type="submit">Add</button></form>
+      <button class="btn soft" style="width:100%" id="closeS">Done</button>`);
+    $('#sheetBody').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{removeEntry(k,Number(b.dataset.del));render();refresh();});
+    $('#dayForm').onsubmit=ev=>{ev.preventDefault();const v=parseKm($('#dayKm').value);if(!(v>0&&v<=100)){shake($('#dayForm .kmfield'));return;}const before=snapshot();addEntry(k,v);render();refresh();celebrateCheck(before);};
+    $('#closeS').onclick=closeSheet;
+  };
+  render();
+}
+function refresh(){renderToday(true);if($('#view-weeks').classList.contains('on'))renderWeeks();if($('#view-year').classList.contains('on'))renderYear();}
+
+let goalDraft=35;
+function openSettings(welcome){
+  goalDraft=goalFor(weekStart(today()));
+  openSheet(`${welcome?`<h2>Hello Rose! 🌳</h2><p>Let’s set a weekly walking goal. Your daily target is that divided by seven — hit it to earn a medal and a tree hug.</p>`:`<h2>Settings</h2><p>Changing your goal applies from this week onwards — past weeks keep their old goal.</p>`}
+    <label class="label">Weekly goal</label>
+    <div class="stepper"><button data-step="-5" aria-label="Less">−</button><div class="val"><span id="gVal">${fmt(goalDraft)}</span> <small>km / week</small><div class="muted" style="font:700 13px Nunito" id="gDaily">${fmt(goalDraft/7)} km a day</div></div><button data-step="5" aria-label="More">+</button></div>
+    <button class="btn" style="width:100%" id="saveS">${welcome?'Let’s go!':'Save'}</button>
+    ${welcome?'':`<hr class="sep"><div class="label" style="margin-bottom:6px">Backup</div><p style="font-size:14px">Your walks are saved on this phone. Download a backup now and then, just in case.</p>
+    <div class="btnrow"><button class="btn soft" id="expBtn">Download backup</button><label class="btn soft" style="display:grid;place-items:center">Restore<input type="file" id="impIn" accept="application/json,.json" hidden></label></div>
+    <hr class="sep"><button class="btn danger" style="width:100%" id="resetBtn">Delete all walks</button>`}`);
+  const upd=()=>{$('#gVal').textContent=fmt(goalDraft);$('#gDaily').textContent=`${fmt(goalDraft/7)} km a day`;};
+  $('#sheetBody').querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{goalDraft=Math.max(5,Math.min(300,goalDraft+Number(b.dataset.step)));upd();});
+  $('#saveS').onclick=()=>{state.goals[key(weekStart(today()))]=goalDraft;save();closeSheet();refresh();if(welcome)toast('Goal set — off you go! 🥾');};
+  if(!welcome){
+    $('#expBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`rose-walks-${key(today())}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);};
+    $('#impIn').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.entries)throw 0;if(!confirm('Replace everything on this phone with this backup?'))return;state=Object.assign(defaults(),s);save();closeSheet();refresh();toast('Backup restored');}catch(err){toast('That file doesn’t look like a backup');}};r.readAsText(f);};
+    $('#resetBtn').onclick=()=>{if(confirm('Delete ALL walks? This can’t be undone (unless you have a backup).')){state.entries={};save();closeSheet();refresh();toast('All walks deleted');}};
+  }
+}
+$('#openSettings').onclick=()=>openSettings(false);
+
+/* toast + confetti */
+let toastT;
+function toast(html){const t=$('#toast');t.innerHTML=html;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
+function confetti(n){const cols=['#D9824A','#E3A93B','#8DA47E','#E7A1A6','#C1603A','#4F6B48'];for(let i=0;i<n;i++){const c=document.createElement('i');c.className='confetti';c.style.left=rnd(0,100)+'vw';c.style.background=cols[i%cols.length];c.style.setProperty('--dx',rnd(-80,80)+'px');c.style.setProperty('--r',rnd(-720,720)+'deg');c.style.animationDuration=rnd(1.8,3.4)+'s';c.style.animationDelay=rnd(0,.4)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),4200);}}
+
+/* home-screen icon (PNG generated on the fly for iOS) */
+function makeTouchIcon(){
+  try{const cv=document.createElement('canvas');cv.width=cv.height=180;const c=cv.getContext('2d');
+    const g=c.createLinearGradient(0,0,0,180);g.addColorStop(0,'#94C3E0');g.addColorStop(1,'#E3EEF0');c.fillStyle=g;c.fillRect(0,0,180,180);
+    c.fillStyle='#A6BF8A';c.beginPath();c.moveTo(0,130);c.bezierCurveTo(50,105,120,110,180,118);c.lineTo(180,180);c.lineTo(0,180);c.fill();
+    c.fillStyle='#EFE2C8';c.beginPath();c.moveTo(0,172);c.bezierCurveTo(60,160,90,150,110,140);c.lineTo(122,142);c.bezierCurveTo(100,156,70,170,40,180);c.lineTo(0,180);c.fill();
+    c.fillStyle='#7A5638';c.fillRect(110,80,14,60);
+    [['#D9824A',117,68,34],['#E3A93B',92,84,20],['#C1603A',142,82,22],['#E8B860',117,44,20]].forEach(([f,x,y,r])=>{c.fillStyle=f;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();});
+    $('#touchIcon').href=cv.toDataURL('image/png');}catch(e){}
+}
+
+/* ---------- boot ---------- */
+buildSheep();buildTree();buildPlants();buildStars();
+document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x.dataset.mode===state.sceneMode));
+applyWeather(currentWx);
+// start Rose at the beginning, then walk to today's progress
+placeRose(0);
+renderToday(false);roseP=0;placeRose(0);
+setTimeout(()=>walkTo(progress()),450);
+fetchWeather();
+loadWords();
+makeTouchIcon();
+if(!Object.keys(state.goals).length)setTimeout(()=>openSettings(true),700);
+setInterval(()=>fetchWeather(),30*60e3);
+let lastDay=key(today());
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){fetchWeather();if(key(today())!==lastDay){lastDay=key(today());renderToday(true);}greet();}});
+})();
+</script>
+</body>
+</html>

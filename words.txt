@@ -1,0 +1,118 @@
+
+
+# ── Weather phrases (shown before / early in the walk) ──
+
+[clear]
+Gorgeous — sunnies on!
+Blue skies over Leeds today.
+Is it bikini weather?
+
+[partly]
+Sunny spells — lovely walking weather.
+Bit of sun, bit of cloud. Perfect.
+
+[cloudy]
+Classic grey Yorkshire sky.
+Cloudy but cosy — off we go.
+The sun is having a day off today
+
+[fog]
+Misty moors kind of day.
+Spooky fog — stick to the path!
+
+[drizzle]
+Proper Leeds drizzle — hood up!
+Eddie isn't sure about this weather
+Wilbur wants to stay in bed today
+
+[rain]
+Puddle-jumping weather!
+Rain? Wilbur says no t.
+
+[storm]
+Stormy! Maybe a short one today.
+Thunder about — stay safe out there.
+Maybe it's a walking pad day?
+
+[snow]
+Snow! Wrap up warm.
+Listen to the crunchy sounds other your feet
+Take it easy, it's slippy out there!
+
+[night]
+Evening stroll under the stars.
+Moonlit wander — wrap up.
+
+
+# ── Progress phrases ──
+
+# Once she's started walking (mixed in with the weather phrases)
+[started]
+Lovely — into your stride now.
+Every step counts!
+
+# Halfway — Wilbur runs in
+[wilbur]
+Wilbur's spotted you! Keep going.
+Here comes Wilbur — snorting with excitement!
+Your handsome prince awaits
+Wilbur wants to watch more SatC as a reward
+
+# Three quarters — Eddie runs in
+[eddie]
+Nearly there — Eddie's come to cheer you on!
+Eddie's bouncing — so close now!
+Hello Treat Lady It Is Eddddiiee Smile Stick Smile Stick
+
+# Daily goal reached
+[hug_day]
+Tree hugged! Daily goal done 🌳
+Medal earned — the tree says thank you!
+Get yourself a sweet treat!
+
+# Weekly goal reached ("This week" view)
+[hug_week]
+Weekly goal smashed — big tree hug! 🌳
+You've earned a massive cuddle
+
+
+# ── Distance facts on the Year page ──
+# Format:   Name of journey | distance in km
+# Keep them in order from shortest to longest.
+
+[journeys]
+Leeds to York | 40
+Leeds to Manchester | 70
+the whole Dales Way | 127
+the Leeds & Liverpool Canal | 204
+the Coast to Coast walk | 300
+the Pennine Way | 431
+Land's End to John o'Groats | 1400
+Ilkley Moor & Cow and Calf Loop | 5
+Malham Cove & Gordale Scar Circuit | 8
+Ingleton Waterfalls Trail | 8
+the Scarborough to Whitby Cinder Track | 34
+the Yorkshire Three Peaks | 39
+Leeds to York | 40
+Leeds to Manchester | 70
+the Nidderdale Way | 86
+the Ure Salmon Run | 120
+the whole Dales Way | 127
+crossing Yorkshire west to east | 145
+the Cleveland Way | 175
+the Leeds & Liverpool Canal | 204
+the Coast to Coast walk | 300
+the Pennine Way | 431
+the Yorkshire Boundary Walk | 724
+a Flamborough puffin's winter migration | 800
+Land's End to John o'Groats | 1400
+a Common Toad's annual pond migration | 2
+a Pipistrelle Bat's nightly hunting circuit | 10
+a Swaledale sheep's weekly range | 15
+a Harewood Red Kite's daily forage | 30
+a Barn Owl's weekly territory range | 45
+a River Ure Salmon's upstream swim | 120
+a Bempton Cliffs Gannet's feeding flight | 320
+a Flamborough Puffin's winter migration | 800
+a Cuckoo's migration from Yorkshire to Sub-Saharan Africa | 7000
+a Swallows' annual flight from Yorkshire to South Africa | 10000

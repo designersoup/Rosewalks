@@ -36,7 +36,7 @@ Maybe it's a walking pad day?
 
 [snow]
 Snow! Wrap up warm.
-Listen to the crunchy sounds other your feet
+Listen to the crunchy sounds under your feet
 Take it easy, it's slippy out there!
 
 [night]
@@ -50,6 +50,11 @@ Moonlit wander — wrap up.
 [started]
 Lovely — into your stride now.
 Every step counts!
+You are doing great
+Well done for getting out there!
+You are the best
+The universe is proud of you
+
 
 # Halfway — Wilbur runs in
 [wilbur]
@@ -57,23 +62,32 @@ Wilbur's spotted you! Keep going.
 Here comes Wilbur — snorting with excitement!
 Your handsome prince awaits
 Wilbur wants to watch more SatC as a reward
+Wilbur is asking for a take away dog sausage
+
 
 # Three quarters — Eddie runs in
 [eddie]
 Nearly there — Eddie's come to cheer you on!
 Eddie's bouncing — so close now!
 Hello Treat Lady It Is Eddddiiee Smile Stick Smile Stick
+Eddie wants to go get a pupcup
 
 # Daily goal reached
 [hug_day]
 Tree hugged! Daily goal done 🌳
 Medal earned — the tree says thank you!
 Get yourself a sweet treat!
+You've earned another carvery
+Is Frut open? Time for a reward
+
 
 # Weekly goal reached ("This week" view)
 [hug_week]
 Weekly goal smashed — big tree hug! 🌳
 You've earned a massive cuddle
+You are the best!
+The trees love you so much
+
 
 
 # ── Distance facts on the Year page ──

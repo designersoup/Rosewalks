@@ -24,9 +24,9 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{color-scheme:light;touch-action:pan-x pan-y;-webkit-text-size-adjust:100%}
 body{
+  touch-action:pan-x pan-y;
   margin:0;color:var(--ink);font-family:'Nunito',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
   background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .18 0 0 0 0 .16 0 0 0 0 .14 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  touch-action:pan-x pan-y;
 }
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 input,select,textarea{font-size:16px}
@@ -54,6 +54,7 @@ header.top .sub{color:var(--ink2);font-size:14px;margin-top:4px;font-weight:700}
 
 /* SVG animation */
 .anim *{transform-box:fill-box}
+.anim [transform]{transform-box:view-box}
 .leg,.arm{transform-origin:50% 0;transition:transform .5s ease}
 .walking .leg-front{animation:swingA .55s ease-in-out infinite alternate}
 .walking .leg-back{animation:swingB .55s ease-in-out infinite alternate}
@@ -68,7 +69,8 @@ header.top .sub{color:var(--ink2);font-size:14px;margin-top:4px;font-weight:700}
 @keyframes breathe{50%{transform:translateY(-.5px)}}
 .hugging .arm-front{transform:rotate(-80deg)}
 .hugging .arm-back{transform:rotate(-70deg)}
-#rose.hugging .bob{animation:none;transform:rotate(7deg)}
+#rose.hugging .bob,#you.hugging .bob{animation:none;transform:rotate(7deg)}
+#you:not(.walking):not(.hugging) .bob{animation:breathe 3.2s ease-in-out infinite}
 .dleg{transform-origin:50% 0}
 .running .dleg.a{animation:dogA .18s linear infinite alternate}
 .running .dleg.b{animation:dogB .18s linear infinite alternate}
@@ -115,6 +117,8 @@ header.top .sub{color:var(--ink2);font-size:14px;margin-top:4px;font-weight:700}
 @keyframes robin{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-12deg)}90%{transform:rotate(0)}}
 .flick{transform-origin:100% 100%;animation:flick 3.5s ease-in-out infinite}
 @keyframes flick{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(-14deg)}80%{transform:rotate(6deg)}85%{transform:rotate(-10deg)}}
+.scurry{transform-origin:50% 100%;animation:scurry 9s ease-in-out infinite}
+@keyframes scurry{0%,30%{transform:translate(0,0)}36%{transform:translate(-14px,0)}38%{transform:translate(-14px,-1px)}40%,62%{transform:translate(-14px,0)}64%,68%{transform:translate(-14px,0) scaleX(-1)}74%{transform:translate(0,0) scaleX(-1)}76%,100%{transform:translate(0,0)}}
 .hop{animation:hop 5s ease-in-out infinite}
 @keyframes hop{0%,82%,100%{transform:translate(0,0)}88%{transform:translate(-5px,-7px)}94%{transform:translate(-10px,0)}97%{transform:translate(-10px,0)}}
 .graze{transform-origin:100% 0%;animation:graze 6s ease-in-out infinite}
@@ -145,9 +149,15 @@ header.top .sub{color:var(--ink2);font-size:14px;margin-top:4px;font-weight:700}
 .btn:active{transform:translate(2px,2px);box-shadow:none}
 .btn.soft{background:var(--card);color:var(--ink);border:1.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
 .btn.danger{background:#B5562F}
-.quick{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.quick button{padding:7px 13px;border-radius:999px;border:1.5px dashed var(--ink2);font-weight:800;font-size:14px;color:var(--ink2)}
-.quick button:active{background:var(--track)}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.quick button{padding:12px 0;border-radius:14px;border:1.5px solid var(--ink);background:#fff;font-weight:800;font-size:15px;box-shadow:2px 2px 0 var(--ink)}
+.quick button:active{transform:translate(2px,2px);box-shadow:none;background:var(--track)}
+.setrow{display:flex;align-items:baseline;gap:6px;margin-top:2px}
+.bigin{width:3.6ch;font:700 36px 'Fraunces',serif;color:var(--ink);background:transparent;border:0;border-bottom:2px dashed var(--muted);border-radius:0;padding:0 2px;outline:0}
+.bigin::placeholder{color:var(--muted)}
+.bigin:focus{border-bottom-color:var(--terra);background:#fff;border-radius:8px 8px 0 0}
+.setrow .unit{font-size:16px;color:var(--ink2);font-weight:700}
+.btn.mini{min-height:34px;padding:0 14px;font-size:14px;border-radius:12px;align-self:center}
 .undo{font-size:13px;color:var(--ink2);text-decoration:underline;margin-top:10px;font-weight:700}
 
 /* Week strip */
@@ -390,6 +400,29 @@ hr.sep{border:0;border-top:1.5px dashed var(--muted);margin:20px 0}
           <g id="shades" display="none"><rect x="-3.4" y="-62.8" width="5" height="2.8" rx="1.3" fill="#E7A1A6" stroke="#B9767C" stroke-width=".5"/><rect x="2.6" y="-62.4" width="5" height="2.8" rx="1.3" fill="#E7A1A6" stroke="#B9767C" stroke-width=".5"/></g>
           <g class="arm arm-front"><rect x="-2.4" y="-42" width="4.8" height="16" rx="2.4" style="fill:var(--coat)"/><path d="M-2.4 -29 h4.8" stroke="rgba(0,0,0,.15)" stroke-width="1"/><circle cx="0" cy="-26" r="2.4" fill="#F2CBAA"/></g>
         </g></g></g>
+        <!-- You (joins the hug when the weekly goal is reached) -->
+        <g id="you" transform="translate(440 234)" display="none" style="cursor:pointer;--jk:#DE8F82;--jkDark:#C9786C;--jkLine:#C97C70;--jkPocket:#E39A8D;--jkTrim:#C47065;--jkCollar:#D47F72"><g id="youFlip" transform="scale(-1 1)"><g transform="scale(1.06)"><g class="bob">
+          <g class="arm arm-back"><rect x="-2.6" y="-46" width="5.2" height="17" rx="2.6" style="fill:var(--jkDark)"/><circle cx="0" cy="-29" r="2.6" fill="#E2B08E"/></g>
+          <g class="leg leg-back"><rect x="-2.9" y="-24" width="5.8" height="20" rx="2.4" fill="#2F4A72"/><path d="M-3.4 -5h6.8q4 0 4 3.4v1.8h-10.8z" fill="#5E4C40"/><path d="M-3.4 -.5h10.8" stroke="#E8DFD2" stroke-width="1"/></g>
+          <g class="leg leg-front"><rect x="-2.9" y="-24" width="5.8" height="20" rx="2.4" fill="#3D5F92"/><rect x="-3.2" y="-7.4" width="6.4" height="2.4" rx="1" fill="#6C8DBE"/><path d="M-3.4 -5h6.8q4 0 4 3.4v1.8h-10.8z" fill="#6E5A4C"/><path d="M-3.4 -.5h10.8" stroke="#F1EBE2" stroke-width="1"/><path d="M0 -4.2l2.4 1.6M1.6 -4.4l2.2 1.6" stroke="#F1EBE2" stroke-width=".5"/></g>
+          <path d="M-8 -48.5 Q0 -51.5 8 -48.5 L9.6 -22 Q0 -20 -9.6 -22 Z" style="fill:var(--jk)"/>
+          <path d="M1.5 -49.6 L6.6 -48.6 L7.6 -22.3 L2.6 -21.8 Z" fill="#232325"/>
+          <path id="youLines" d="M-6.5 -46v22M-4 -47v24M-1.5 -47.6v25" style="stroke:var(--jkLine)" stroke-width=".6" opacity=".8"/>
+          <rect x="-6.4" y="-42" width="5" height="4.6" rx=".8" style="fill:var(--jkPocket);stroke:var(--jkTrim)" stroke-width=".6"/><circle cx="-3.9" cy="-41" r=".6" fill="#2E2A26"/>
+          <path d="M1.4 -49.6 L-1 -45.6 L1.8 -44.6" style="fill:var(--jkCollar)"/>
+          <rect x="-2" y="-51.5" width="4" height="4" fill="#E2B08E"/>
+          <circle cx="1.2" cy="-57" r="8" fill="#EDC3A3"/>
+          <circle cx="-2.8" cy="-56.4" r="1.8" fill="#E2B08E"/>
+          <path d="M-3.4 -56 Q-3 -48.2 3.4 -47.8 Q8.9 -48.2 9.3 -55 L8.6 -53.4 Q7.6 -52.4 6 -52.8 Q4 -53.2 2.4 -52.2 Q0 -51.8 -1 -54.4Z" fill="#9A9089"/>
+          <path d="M4 -53.6 q2.6 -1.3 4.9 0" stroke="#857B74" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M-7 -57.6 Q-7.7 -66.5 1.4 -66.7 Q9.3 -66.5 9.5 -60.4 Q8 -62.7 4 -62.5 Q-2 -62.5 -4 -59 L-4.4 -55.2 Q-6.4 -55.2 -7 -57.6Z" fill="#8F8A84"/>
+          <!-- quiff: swept up and back at the front -->
+          <path d="M1.5 -65.6 Q4.6 -68.6 8.6 -68.4 Q10.6 -68.2 10.6 -66.8 Q10 -64.8 9.4 -61.6 Q8.4 -63.6 5 -63.8 Q2.6 -64 1.5 -65.6Z" fill="#8F8A84"/>
+          <path d="M3.4 -66.6 Q6 -68 9.2 -67.6" stroke="#B3AEA7" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+          <path d="M4.2 -59.7 h2.8" stroke="#6E6862" stroke-width=".8" stroke-linecap="round"/>
+          <circle cx="5.6" cy="-57.4" r="1" fill="#2E2A26"/>
+          <g class="arm arm-front"><rect x="-2.6" y="-46" width="5.2" height="17" rx="2.6" style="fill:var(--jk)"/><path d="M-2.6 -31.6h5.2" style="stroke:var(--jkTrim)" stroke-width="1"/><circle cx="0" cy="-29" r="2.6" fill="#EDC3A3"/></g>
+        </g></g></g></g>
         <g id="hearts"></g>
         <g id="butterflies"></g>
         <g id="fogLayer" opacity="0">
@@ -410,8 +443,12 @@ hr.sep{border:0;border-top:1.5px dashed var(--muted);margin:20px 0}
     <div class="card">
       <div class="row">
         <div>
-          <div class="label" id="todayLabel">Today</div>
-          <div class="big" id="todayBig">0 <small>km</small></div>
+          <label class="label" for="todayInput">Today's distance</label>
+          <form class="setrow" id="setForm" autocomplete="off">
+            <input id="todayInput" class="bigin" type="text" inputmode="decimal" enterkeyhint="done" aria-label="Today's distance in km">
+            <span class="unit">km</span>
+            <button class="btn mini" id="setBtn" type="submit" hidden>Save</button>
+          </form>
         </div>
         <div style="text-align:right">
           <div class="label">Daily target</div>
@@ -420,18 +457,19 @@ hr.sep{border:0;border-top:1.5px dashed var(--muted);margin:20px 0}
       </div>
       <div class="bar" id="todayBar"><i style="width:0"></i></div>
       <div id="todayToGo" style="font-weight:800"></div>
+      <div class="muted" style="font-size:12px;margin-top:6px;font-weight:700">Tap the number to type in what your watch says</div>
     </div>
 
     <div class="card">
-      <div class="label" style="margin-bottom:8px">Add to today's distance</div>
-      <form class="addrow" id="addForm" autocomplete="off">
-        <label class="kmfield"><input id="kmInput" type="text" inputmode="decimal" placeholder="0.0" aria-label="Kilometres walked"><span>km</span></label>
+      <div class="label" style="margin-bottom:8px">Or add a walk</div>
+      <div class="quick" id="quick">
+        <button type="button" data-km="0.5">+0.5 km</button><button type="button" data-km="1">+1 km</button><button type="button" data-km="2">+2 km</button><button type="button" data-km="5">+5 km</button>
+      </div>
+      <form class="addrow" id="addForm" autocomplete="off" style="margin-top:12px">
+        <label class="kmfield"><input id="kmInput" type="text" inputmode="decimal" placeholder="Custom" aria-label="Custom distance to add in km"><span>km</span></label>
         <button class="btn" type="submit">Add</button>
       </form>
-      <div class="quick" id="quick">
-        <button type="button" data-km="0.5">+0.5</button><button type="button" data-km="1">+1</button><button type="button" data-km="2">+2</button><button type="button" data-km="5">+5</button><button type="button" data-km="0">clear</button>
-      </div>
-      <button class="undo" id="undoBtn" hidden>Undo last entry</button>
+      <button class="undo" id="undoBtn" hidden>Undo</button>
     </div>
 
     <div class="card">
@@ -510,7 +548,7 @@ const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth()
 const weekStart=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x;};
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const fmtRange=ws=>{const we=addDays(ws,6);return ws.getMonth()===we.getMonth()?`${ws.getDate()} – ${we.getDate()} ${MONTHS[we.getMonth()]}`:`${ws.getDate()} ${MONTHS[we.getMonth()]} – ${we.getDate()} ${MONTHS[we.getMonth()]}`;};
+const fmtRange=ws=>{const we=addDays(ws,6);return ws.getMonth()===we.getMonth()?`${ws.getDate()} – ${we.getDate()} ${MONTHS[we.getMonth()]}`:`${ws.getDate()} ${MONTHS[ws.getMonth()]} – ${we.getDate()} ${MONTHS[we.getMonth()]}`;};
 const fmt=n=>{const r=Math.round(n*10)/10;return r.toLocaleString('en-GB',{maximumFractionDigits:1});};
 
 /* ---------- data helpers ---------- */
@@ -571,8 +609,40 @@ function startHug(){
   roseEl.classList.add('hugging');
   Object.values(dogs).forEach(d=>d.el.classList.add('cheer'));
   if(!heartTimer){spawnHeart();heartTimer=setInterval(spawnHeart,900);}
+  if(weekDone())youIn(true);
 }
-function stopHug(){roseEl.classList.remove('hugging');Object.values(dogs).forEach(d=>d.el.classList.remove('cheer'));clearInterval(heartTimer);heartTimer=0;}
+function stopHug(){roseEl.classList.remove('hugging');Object.values(dogs).forEach(d=>d.el.classList.remove('cheer'));clearInterval(heartTimer);heartTimer=0;youIn(false);}
+
+/* your jackets: a different one each day (tap yourself in the scene to swap) */
+const JACKETS=[
+  {name:'pink cord',jk:'#DE8F82',jkDark:'#C9786C',jkLine:'#C97C70',jkPocket:'#E39A8D',jkTrim:'#C47065',jkCollar:'#D47F72',dash:''},
+  {name:'brown',jk:'#8B5E3C',jkDark:'#74492D',jkLine:'#7A5033',jkPocket:'#97694A',jkTrim:'#5E3C25',jkCollar:'#6E4529',dash:''},
+  {name:'dark denim',jk:'#2F4766',jkDark:'#253A55',jkLine:'#6F88AC',jkPocket:'#3A5478',jkTrim:'#C9A35A',jkCollar:'#263C59',dash:'1.4 1'}
+];
+let jacketIdx=null;
+function setJacket(i){
+  jacketIdx=i;const j=JACKETS[i],el=$('#you');
+  for(const k of ['jk','jkDark','jkLine','jkPocket','jkTrim','jkCollar'])el.style.setProperty('--'+k,j[k]);
+  if(j.dash)$('#youLines').setAttribute('stroke-dasharray',j.dash);else $('#youLines').removeAttribute('stroke-dasharray');
+}
+$('#you').addEventListener('click',()=>{setJacket((jacketIdx+1)%JACKETS.length);toast(`Wearing the ${JACKETS[jacketIdx].name} jacket`);});
+/* you: walk in from the right and join the hug when the weekly goal is done */
+const you={el:$('#you'),x:440,raf:0,in:false,home:{x:361,y:234}};
+function weekDone(){const ws=weekStart(today());return weekKm(ws)>=goalFor(ws);}
+function youIn(inn){
+  if(you.in===inn)return;you.in=inn;cancelAnimationFrame(you.raf);
+  const el=you.el,flip=$('#youFlip');
+  el.setAttribute('display','');el.classList.remove('hugging');el.classList.add('walking');
+  flip.setAttribute('transform',inn?'scale(-1 1)':'');
+  // Eddie hops over to Rose's side to make room
+  const ed=dogs.eddie;ed.home=inn?{x:298,y:252}:{x:365,y:247};if(ed.in)runDog(ed,true);
+  const from=you.x,to=inn?you.home.x:440,dur=Math.abs(to-from)*26,t0=performance.now();
+  const step=now=>{const k=Math.min(1,(now-t0)/dur);you.x=from+(to-from)*k;el.setAttribute('transform',`translate(${you.x.toFixed(1)} ${you.home.y})`);
+    if(k<1){you.raf=requestAnimationFrame(step);return;}
+    el.classList.remove('walking');
+    if(inn){flip.setAttribute('transform','scale(-1 1)');el.classList.add('hugging');}else el.setAttribute('display','none');};
+  you.raf=requestAnimationFrame(step);
+}
 function spawnHeart(){
   const pt=motion.getPointAtLength(motionLen);
   const g=document.createElementNS(SVGNS,'g');g.setAttribute('transform',`translate(${pt.x+10+rnd(-4,6)} ${pt.y-58})`);
@@ -592,7 +662,7 @@ function runDog(d,inn,instant){
   const flip=d.el.querySelector('.dflip');const from=d.x,to=inn?d.home.x:440;
   const set=(x,hop)=>{d.x=x;d.el.setAttribute('transform',`translate(${x.toFixed(1)} ${(d.home.y-hop).toFixed(1)})`);};
   if(instant){set(to,0);return;}
-  flip.setAttribute('transform',inn?'':'scale(-1 1)');d.el.classList.add('running');d.el.classList.remove('cheer');
+  flip.setAttribute('transform',to<=from?'':'scale(-1 1)');d.el.classList.add('running');d.el.classList.remove('cheer');
   const dur=1000,t0=performance.now();
   const step=now=>{const k=Math.min(1,(now-t0)/dur);const e=1-Math.pow(1-k,3);set(from+(to-from)*e,Math.abs(Math.sin(k*Math.PI*6))*2.5*(1-k));
     if(k<1)d.raf=requestAnimationFrame(step);else{d.el.classList.remove('running');flip.setAttribute('transform','');if(roseP>=0.999&&inn)d.el.classList.add('cheer');}};
@@ -687,12 +757,75 @@ async function loadWords(){
       else out[sec].push(line);
     }
     for(const k in out)if(out[k].length)TEXT[k]=out[k];
+    const seen=new Set();TEXT.journeys=TEXT.journeys.filter(j=>{const id=j[0].toLowerCase();if(seen.has(id))return false;seen.add(id);return true;});
     TEXT.journeys.sort((a,b)=>a[1]-b[1]);
     renderMsg();if($('#view-year').classList.contains('on'))renderYear();
   }catch(e){}
 }
-let liveWx=null;
+let liveWx=null, previewIdx=-1;
+const PREVIEW=[{kind:'clear',isDay:true,temp:21},{kind:'partly',isDay:true,temp:15},{kind:'cloudy',isDay:true,temp:10},{kind:'fog',isDay:true,temp:6},{kind:'drizzle',isDay:true,temp:9},{kind:'rain',isDay:true,temp:8,heavy:true},{kind:'storm',isDay:true,temp:12},{kind:'snow',isDay:true,temp:-1},{kind:'clear',isDay:false,temp:5}];
 
+/* animals: chosen by season, weather and time of day; a daily "dice roll" adds variety */
+function dayRand(n){let x=(Number(key(today()).replace(/-/g,''))*9301+n*49297)%233280;return x/233280;}
+const COW=(x,y,flip)=>`<g transform="translate(${x} ${y})${flip?' scale(-1 1)':''}">
+  <g fill="#3A3530"><rect x="-5.5" y="-3.6" width="1.6" height="3.8" rx=".6"/><rect x="-3" y="-3.6" width="1.6" height="3.8" rx=".6"/><rect x="2.6" y="-3.6" width="1.6" height="3.8" rx=".6"/><rect x="4.8" y="-3.6" width="1.6" height="3.8" rx=".6"/></g>
+  <path d="M6.6 -7.5 q1.6 2 1 5" stroke="#3A3530" stroke-width=".7" fill="none"/>
+  <rect x="-6.4" y="-9.2" width="13.4" height="6.4" rx="2.8" fill="#FAF8F3"/>
+  <path d="M-2 -9.2 q2 2.6 0 5 q-2-.4-2.6-2.6z M3 -9.2 q1.8 1.4 3.2 .4 v2.4 q-2 .6-3.2-.6z" fill="#2E2A26"/>
+  <ellipse cx="0" cy="-2.8" rx="1.3" ry=".8" fill="#E9B7A7"/>
+  <g class="graze" style="animation-delay:${(x%5)}s"><rect x="-10" y="-11" width="4.6" height="5.4" rx="1.8" fill="#2E2A26"/><rect x="-10.4" y="-7.4" width="4" height="2.6" rx="1.2" fill="#E9B7A7"/><path d="M-9.6 -11 l-1.4-1.4 M-6 -11 l1-1.4" stroke="#D8CBB0" stroke-width=".8" stroke-linecap="round"/><circle cx="-8.8" cy="-9.4" r=".45" fill="#fff"/></g>
+</g>`;
+const GOAT=(x,y,col,flip)=>`<g transform="translate(${x} ${y})${flip?' scale(-1 1)':''}">
+  <g stroke="#5A4A3C" stroke-width="1.1" stroke-linecap="round"><path d="M-3.4 -4v4M-1.6 -4v4M2.4 -4v4M4 -4v4"/></g>
+  <ellipse cx="0.4" cy="-5.6" rx="5.6" ry="3.2" fill="${col}"/>
+  <path d="M-5 -6.6 l-1.4-1.4" stroke="${col}" stroke-width="1.4" stroke-linecap="round"/>
+  <g class="goatgraze" style="animation-delay:${(x%4)}s"><path d="M5 -7.8 q1.6-4.6 0-7.6 M6.2 -8.2 q2-4 .6-7" stroke="#8C7B66" stroke-width=".9" fill="none" stroke-linecap="round"/>
+  <path d="M4.4 -7.2 l3.6-4.4 l3.2 2.6 l-1.6 1.6 z" fill="${col}"/><path d="M9.2 -7.6 l.4 2.6 l-1.4-1.6z" fill="#D9CDB8"/><circle cx="8" cy="-9.8" r=".45" fill="#2E2A26"/><path d="M4.8-10.8 l-2.4-.8" stroke="${col}" stroke-width="1.2" stroke-linecap="round"/></g>
+</g>`;
+const SQUIRREL=(x,y,acorn)=>`<g transform="translate(${x} ${y})">
+  <g class="flick"><path d="M-2 0 C-10 -1 -11 -9 -7.5 -12.5 C-4.6 -15 -1.6 -13 -3.6 -10 C-5.6 -7 -4 -3 -.6 -2Z" fill="#8F8780"/><path d="M-6 -11 C-4 -12 -3 -11 -4.2 -9.6" stroke="#B8B0A8" stroke-width=".8" fill="none"/></g>
+  <ellipse cx="1" cy="-4" rx="3.3" ry="4.1" fill="#9A928A"/><ellipse cx="2.4" cy="-3.6" rx="1.5" ry="2.6" fill="#ECE5DB"/>
+  <circle cx="3" cy="-9.2" r="2.8" fill="#9A928A"/><path d="M1.6 -11.4 l.5-2.6 l1.4 2.2z" fill="#9A928A"/>
+  <circle cx="4.1" cy="-9.6" r=".6" fill="#1E1E1E"/><circle cx="5.7" cy="-8.7" r=".45" fill="#3A3530"/>
+  ${acorn?`<ellipse cx="4.8" cy="-5.6" rx="1.2" ry="1.5" fill="#A9743F"/><path d="M3.6 -6.6 h2.4 a1.2 .8 0 0 0 -2.4 0z" fill="#6B4A2B"/>`:''}
+  <ellipse cx="3.6" cy="-5.8" rx="1.2" ry=".8" fill="#8F8780"/>
+</g>`;
+const FROG=(x,y,delay)=>`<g transform="translate(${x} ${y})"><g class="hop" style="animation-delay:${delay}s">
+  <ellipse cx="1.8" cy="-1.2" rx="2.2" ry="1.3" fill="#5C8F40"/>
+  <ellipse cx="0" cy="-2.6" rx="4" ry="2.6" fill="#71A651"/><ellipse cx="-.8" cy="-1.6" rx="2.4" ry="1.1" fill="#C9DD9A"/>
+  <circle cx="-2.2" cy="-4.6" r="1.4" fill="#71A651"/><circle cx="0.4" cy="-4.9" r="1.3" fill="#71A651"/>
+  <circle cx="-2.4" cy="-4.8" r=".6" fill="#1E1E1E"/><circle cx="0.2" cy="-5.1" r=".55" fill="#1E1E1E"/>
+  <path d="M-3.6 -3 q1.4 .8 2.8 .2" stroke="#3E6A2A" stroke-width=".5" fill="none"/>
+</g></g>`;
+const MOUSE=(x,y)=>`<g transform="translate(${x} ${y})"><g class="scurry">
+  <path d="M3.6 -1.8 q4 1.6 6.6 -.4 q1.6 -1.2 2.6 -.2" stroke="#C49A78" stroke-width=".6" fill="none" stroke-linecap="round"/>
+  <ellipse cx="0" cy="-2.6" rx="4.2" ry="2.7" fill="#A8774D"/><ellipse cx="-.6" cy="-1.5" rx="2.6" ry="1.1" fill="#E9D8C2"/>
+  <circle cx="-3.9" cy="-3.4" r="2.2" fill="#A8774D"/><path d="M-5.6 -4.2 L-7.4 -3 L-5.4 -2.4Z" fill="#A8774D"/>
+  <circle cx="-3" cy="-5.9" r="1.6" fill="#B98A62"/><circle cx="-3" cy="-5.9" r=".9" fill="#E9A9A0"/>
+  <circle cx="-5" cy="-3.9" r=".55" fill="#1E1E1E"/><circle cx="-7.3" cy="-3" r=".45" fill="#D98A86"/>
+  <path d="M-7 -2.8 l-1.6 -.4 M-7 -2.6 l-1.6 .5" stroke="#6E5A4C" stroke-width=".25"/>
+  <path d="M-2.4 -.2 v.4 M1.6 -.2 v.4" stroke="#E9A9A0" stroke-width=".8" stroke-linecap="round"/>
+</g></g>`;
+function buildAnimals(k,day,wet){
+  const s=season(), snowy=k==='snow', stormy=k==='storm';
+  let field='';
+  // field: cows out from spring to autumn, goats on their rock otherwise (and on some days anyway)
+  const cowsOut=day&&!snowy&&s!=='winter';
+  const goatsDay=dayRand(1)<0.4;
+  if(cowsOut&&!goatsDay)field+=COW(40,180,false)+COW(70,176,true)+(dayRand(2)<.5?COW(100,173,false):'');
+  else if(day&&!stormy){
+    field+=`<g transform="translate(-140 6)"><path d="M198 179 Q201 168 211 165 Q224 160 236 165 Q245 171 248 179Z" fill="#A9A59D"/><path d="M211 165 Q224 160 236 165 Q230 168 222 167Z" fill="#C2BEB5"/><path d="M205 176 q8-3 14 0 M226 174 q6-2 12 1" stroke="#8D8981" stroke-width=".8" fill="none"/></g>`;
+    field+=GOAT(74,171,'#F3EEE4',false)+GOAT(94,172,'#A0764E',true);
+  }
+  $('#field').innerHTML=field;
+  // squirrel on the wall (not at night; acorn in autumn)
+  $('#squirrel').innerHTML=day&&!stormy&&dayRand(3)<0.75?SQUIRREL(114,193,s==='autumn'||s==='winter'):'';
+  // frogs: rainy days or spring/summer evenings, never when it's freezing
+  const frogs=!snowy&&s!=='winter'&&(wet||((s==='spring'||s==='summer')&&(!day||dayRand(4)<0.5)));
+  // field mouse: pottering in the grass, except in snow or storms
+  const mouse=!snowy&&!stormy?MOUSE(112,259):'';
+  $('#frogs').innerHTML=(frogs?FROG(138,255,0)+(wet?FROG(250,240,2.5):''):'')+mouse;
+}
 function applyWeather(w){
   const k=w.kind, day=w.isDay!==false, windy=(w.wind||0)>28;
   const skies={clear:['#7FBCE3','#DCEFF6'],partly:['#94C3E0','#E3EEF0'],cloudy:['#AEB9C2','#E1E3DF'],fog:['#CFD2CF','#ECEBE5'],drizzle:['#93A0AB','#CDD3D4'],rain:['#7F8D99','#C3CACC'],storm:['#566170','#959EA6'],snow:['#BCC8D2','#EDF1F3']};
@@ -711,6 +844,7 @@ function applyWeather(w){
   const wet=['drizzle','rain','storm'].includes(k);
   if(wet)buildRain(k!=='drizzle'||w.heavy);else $('#rain').innerHTML='';
   if(k==='snow')buildSnow();else $('#snow').innerHTML='';
+  buildTree(k==='snow');buildPlants();buildAnimals(k,day,wet);
   $('#snowCover').setAttribute('opacity',k==='snow'?1:0);
   $('#fogLayer').setAttribute('opacity',k==='fog'?1:0);
   $('#puddles').setAttribute('opacity',wet?1:0);
@@ -731,23 +865,33 @@ function applyWeather(w){
   roseEl.style.setProperty('--coat',bomber?'#1F1C1A':'#2A2A2E');roseEl.style.setProperty('--coatDark',bomber?'#141210':'#1B1B1E');
   // chip
   $('#wxIcon').innerHTML=wxIconSVG(k,day);
-  const label=`Leeds · ${Math.round(w.temp)}° · ${WX_LABEL[w.code]||k}${w.max!=null?` · H${Math.round(w.max)}° L${Math.round(w.min)}°`:''}`;
+  const label=w.preview?`Preview: ${k}${day?'':' (night)'} · tap`:`Leeds · ${Math.round(w.temp)}° · ${WX_LABEL[w.code]||k}${w.max!=null?` · H${Math.round(w.max)}° L${Math.round(w.min)}°`:''}`;
   $('#wxText').textContent=label;
   currentWx=w;renderMsg();
 }
 let currentWx={kind:'cloudy',isDay:true,temp:10};
 async function fetchWeather(force){
-  try{const c=JSON.parse(localStorage.getItem(WXSTORE)||'null');if(c&&!force&&Date.now()-c.at<30*60e3){liveWx=c.data;applyWeather(liveWx);return;}}catch(e){}
+  try{const c=JSON.parse(localStorage.getItem(WXSTORE)||'null');if(c&&!force&&Date.now()-c.at<30*60e3){liveWx=c.data;if(previewIdx<0)applyWeather(liveWx);return;}}catch(e){}
   try{
     const url=`https://api.open-meteo.com/v1/forecast?latitude=${LEEDS.lat}&longitude=${LEEDS.lon}&current=temperature_2m,weather_code,is_day,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Europe%2FLondon&forecast_days=1`;
     const r=await fetch(url);if(!r.ok)throw new Error(r.status);const j=await r.json();
     liveWx={code:j.current.weather_code,kind:kindOf(j.current.weather_code),temp:j.current.temperature_2m,isDay:!!j.current.is_day,wind:j.current.wind_speed_10m,max:j.daily.temperature_2m_max[0],min:j.daily.temperature_2m_min[0],heavy:[65,82].includes(j.current.weather_code)};
     try{localStorage.setItem(WXSTORE,JSON.stringify({at:Date.now(),data:liveWx}));}catch(e){}
-    applyWeather(liveWx);
+    if(previewIdx<0)applyWeather(liveWx);
   }catch(e){
-    if(!liveWx){const h=new Date().getHours();applyWeather({kind:'cloudy',isDay:h>=7&&h<18,temp:10,code:3});$('#wxText').textContent='Leeds · weather offline';}
+    if(!liveWx&&previewIdx<0){const h=new Date().getHours();applyWeather({kind:'cloudy',isDay:h>=7&&h<18,temp:10,code:3});$('#wxText').textContent='Leeds · weather offline';}
   }
 }
+// tap the tree to preview the seasons (it follows the calendar normally)
+const SEASONS=['spring','summer','autumn','winter'];
+$('#tree').addEventListener('click',()=>{
+  const real=(seasonPreview=null,season());
+  const order=SEASONS.slice(SEASONS.indexOf(real)).concat(SEASONS.slice(0,SEASONS.indexOf(real)));
+  seasonIdx=(seasonIdx+1)%4;seasonPreview=seasonIdx===0?null:order[seasonIdx];
+  applyWeather(currentWx);
+  const n=season();toast(seasonPreview?`Preview: ${n[0].toUpperCase()+n.slice(1)} tree · tap again`:`Back to today’s season (${n})`);
+});
+let seasonIdx=0;
 
 /* ---------- UI rendering ---------- */
 let lastMsgKey='';
@@ -777,7 +921,7 @@ function renderToday(animate){
   greet();
   const t=today(),tk=key(t),ws=weekStart(t),goal=goalFor(ws),daily=goal/7;
   const km=dayKm(tk),wk=weekKm(ws);
-  $('#todayBig').innerHTML=`${fmt(km)} <small>km</small>`;
+  if(document.activeElement!==$('#todayInput'))$('#todayInput').value=fmt(km);
   $('#dailyTarget').textContent=`${fmt(daily)} km`;
   $('#todayBar i').style.width=Math.min(100,km/daily*100)+'%';
   const left=daily-km;
@@ -799,8 +943,7 @@ function renderToday(animate){
   for(let i=0;i<7;i++){const d=addDays(ws,i),k=key(d),dk=dayKm(k),fut=d>t,isT=k===tk,ok=hit(dk,daily);
     h+=`<button class="day${isT?' today':''}${fut?' future':''}" data-day="${k}" ${fut?'disabled':''}><span class="dname">${DAYS[i][0]}</span><span class="ring">${ok?`<span class="${animate&&isT?'medal-pop':''}">${medalSVG(24)}</span>`:ringSVG(Math.min(1,dk/daily))}</span><span class="dkm">${dk?fmt(dk):'–'}</span></button>`;}
   $('#strip').innerHTML=h;
-  $('#undoBtn').hidden=!(state.entries[tk]&&state.entries[tk].length);
-  $('#todayLabel').textContent='Today';
+  $('#undoBtn').hidden=!undoStack.some(u=>u.k===tk);
   // scene
   const p=progress();
   const sw=state.sceneMode==='week';
@@ -882,15 +1025,40 @@ function celebrateCheck(before){
   else if(hit(nowDay,daily)&&!hit(before.day,daily)){toast(`${medalSVG(18)} Daily medal earned!`);confetti(30);}
 }
 function snapshot(){const t=today();return {day:dayKm(key(t)),week:weekKm(weekStart(t))};}
+/* undo: remembers today's entries before each change */
+const undoStack=[];
+function pushUndo(){const k=key(today());undoStack.push({k,prev:JSON.parse(JSON.stringify(state.entries[k]||null))});if(undoStack.length>20)undoStack.shift();}
+function addKm(v){
+  if(!(v>0)){shake($('.kmfield'));return false;}
+  if(v>100){toast('That’s a long way! Max 100 km at once');return false;}
+  const before=snapshot();pushUndo();addEntry(key(today()),v);renderToday(true);celebrateCheck(before);toast(`Added ${fmt(v)} km`);return true;
+}
+// "Today's distance" box: type the total from the watch and it replaces today's figure
+function commitTotal(){
+  const inp=$('#todayInput'),k=key(today()),cur=dayKm(k);
+  const raw=inp.value.trim();inp.placeholder='';
+  $('#setBtn').hidden=true;
+  if(raw===''){inp.value=fmt(cur);return;}
+  const v=parseKm(raw);
+  if(!isFinite(v)||v<0||v>200){toast('Hmm, that doesn’t look like a distance');inp.value=fmt(cur);return;}
+  if(Math.abs(v-cur)<0.005){inp.value=fmt(cur);return;}
+  const before=snapshot();pushUndo();
+  if(v===0)delete state.entries[k];else state.entries[k]=[{id:Date.now(),t:new Date().toISOString(),km:Math.round(v*100)/100,set:true}];
+  save();renderToday(true);celebrateCheck(before);toast(`Today set to ${fmt(v)} km`);
+}
+$('#setForm').addEventListener('submit',e=>{e.preventDefault();$('#todayInput').blur();});
+$('#todayInput').addEventListener('focus',e=>{e.target.placeholder=e.target.value;e.target.value='';$('#setBtn').hidden=false;});
+$('#todayInput').addEventListener('input',()=>{$('#setBtn').hidden=false;});
+$('#todayInput').addEventListener('blur',commitTotal);
 $('#addForm').addEventListener('submit',e=>{
-  e.preventDefault();const v=parseKm($('#kmInput').value);
-  if(!(v>0)){shake($('.kmfield'));return;}
-  if(v>100){toast('That’s a long way! Max 100 km at once');return;}
-  const before=snapshot();addEntry(key(today()),v);$('#kmInput').value='';$('#kmInput').blur();
-  renderToday(true);celebrateCheck(before);
+  e.preventDefault();if(addKm(parseKm($('#kmInput').value))){$('#kmInput').value='';$('#kmInput').blur();}
 });
-$('#quick').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const inc=parseFloat(b.dataset.km);const cur=parseKm($('#kmInput').value)||0;$('#kmInput').value=inc===0?'':fmt(cur+inc).replace(/,/g,'');});
-$('#undoBtn').onclick=()=>{const k=key(today());const arr=state.entries[k];if(!arr||!arr.length)return;const last=arr[arr.length-1];removeEntry(k,last.id);renderToday(true);toast(`Removed ${fmt(last.km)} km`);};
+$('#quick').addEventListener('click',e=>{const b=e.target.closest('button');if(b)addKm(parseFloat(b.dataset.km));});
+$('#undoBtn').onclick=()=>{
+  const u=undoStack.pop();if(!u)return;
+  if(u.prev)state.entries[u.k]=u.prev;else delete state.entries[u.k];
+  save();renderToday(true);toast(`Undone — today is ${fmt(dayKm(u.k))} km`);
+};
 document.querySelector('.seg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;state.sceneMode=b.dataset.mode;save();document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b));renderToday(true);});
 $('#strip').addEventListener('click',e=>{const b=e.target.closest('.day');if(b&&!b.disabled)openDay(b.dataset.day);});
 function shake(el){el.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:280});}
@@ -911,7 +1079,7 @@ function openDay(k){
     const list=state.entries[k]||[],km=dayKm(k);
     openSheet(`<h2>${d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</h2>
       <p>${fmt(km)} km of ${fmt(daily)} km ${hit(km,daily)?'— medal earned! '+medalSVG(16):''}</p>
-      ${list.length?`<ul class="entries">${list.map(e=>`<li><span>${new Date(e.t).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})} · ${fmt(e.km)} km</span><button data-del="${e.id}">Remove</button></li>`).join('')}</ul>`:'<div class="empty">No walks logged this day.</div>'}
+      ${list.length?`<ul class="entries">${list.map(e=>`<li><span>${new Date(e.t).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})} · ${fmt(e.km)} km${e.set?' <span class="muted">(watch total)</span>':''}</span><button data-del="${e.id}">Remove</button></li>`).join('')}</ul>`:'<div class="empty">No walks logged this day.</div>'}
       <form class="addrow" id="dayForm" style="margin-bottom:14px"><label class="kmfield"><input id="dayKm" type="text" inputmode="decimal" placeholder="Add km"><span>km</span></label><button class="btn" type="submit">Add</button></form>
       <button class="btn soft" style="width:100%" id="closeS">Done</button>`);
     $('#sheetBody').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{removeEntry(k,Number(b.dataset.del));render();refresh();});
@@ -960,7 +1128,7 @@ function makeTouchIcon(){
 }
 
 /* ---------- boot ---------- */
-buildSheep();buildTree();buildPlants();buildStars();
+buildSheep();buildStars();setJacket(Math.floor(dayRand(7)*JACKETS.length));
 document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x.dataset.mode===state.sceneMode));
 applyWeather(currentWx);
 // start Rose at the beginning, then walk to today's progress

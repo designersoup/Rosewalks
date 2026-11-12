@@ -90,43 +90,171 @@ The trees love you so much
 
 
 
-# ── Distance facts on the Year page ──
+# ── Distance facts ──
+# Used two ways: under today's distance (what she's beaten today)
+# and on the Year page (journeys completed this year).
 # Format:   Name of journey | distance in km
-# Keep them in order from shortest to longest.
+# Any order is fine — they're sorted shortest to longest automatically.
 
 [journeys]
-Leeds to York | 40
-Leeds to Manchester | 70
-the whole Dales Way | 127
-the Leeds & Liverpool Canal | 204
-the Coast to Coast walk | 300
-the Pennine Way | 431
-Land's End to John o'Groats | 1400
-Ilkley Moor & Cow and Calf Loop | 5
-Malham Cove & Gordale Scar Circuit | 8
-Ingleton Waterfalls Trail | 8
-the Scarborough to Whitby Cinder Track | 34
-the Yorkshire Three Peaks | 39
-Leeds to York | 40
-Leeds to Manchester | 70
-the Nidderdale Way | 86
-the Ure Salmon Run | 120
-the whole Dales Way | 127
-crossing Yorkshire west to east | 145
-the Cleveland Way | 175
-the Leeds & Liverpool Canal | 204
-the Coast to Coast walk | 300
-the Pennine Way | 431
-the Yorkshire Boundary Walk | 724
-a Flamborough puffin's winter migration | 800
-Land's End to John o'Groats | 1400
-a Common Toad's annual pond migration | 2
-a Pipistrelle Bat's nightly hunting circuit | 10
-a Swaledale sheep's weekly range | 15
-a Harewood Red Kite's daily forage | 30
-a Barn Owl's weekly territory range | 45
-a River Ure Salmon's upstream swim | 120
-a Bempton Cliffs Gannet's feeding flight | 320
-a Flamborough Puffin's winter migration | 800
-a Cuckoo's migration from Yorkshire to Sub-Saharan Africa | 7000
-a Swallows' annual flight from Yorkshire to South Africa | 10000
+a Snail’s energetic overnight voyage | 0.05 km
+a French Bulldog’s stubborn refusal to move any further | 0.1 km
+the distance a Fey/Fairy travels on a gust of wind | 0.2 km
+a Robin’s brave hop around a Yorkshire garden | 0.3 km
+a Mouse’s midnight expedition across the kitchen floor | 0.5 km
+a Bumblebee’s daily flower-to-flower pollen trail | 1 km
+a Witch’s swift midnight broomstick test-flight | 1.5 km
+a Common Toad's annual pond migration | 2 km
+a Hedgehog's nightly foraging stroll | 3 km
+a Squirrel’s frantic hunt for forgotten acorns | 4 km
+Ilkley Moor & Cow and Calf Loop | 5 km
+a Badger’s dusk-till-dawn woodland patrol | 6 km
+a Puffin’s clumsy waddle from nest to cliff edge | 7 km
+Ingleton Waterfalls Trail | 8 km
+Malham Cove & Gordale Scar Circuit | 8 km
+a Pipistrelle Bat's nightly hunting circuit | 10 km
+a Will-o'-the-Wisp guiding a lost traveler off-path | 12 km
+a Swaledale sheep's weekly range | 15 km
+a Fox's nightly territorial patrol | 20 km
+a Harewood Red Kite's daily forage | 30 km
+the Scarborough to Whitby Cinder Track | 34 km
+the Yorkshire Three Peaks | 39 km
+Leeds to York | 40 km
+a Barn Owl's weekly territory range | 45 km
+Leeds to Manchester | 70 km
+the Calderdale Way | 80 km
+the Nidderdale Way | 86 km
+altitude to the Kármán line (the edge of space) | 100 km
+the Ure Salmon Run (a River Ure Salmon's upstream swim) | 120 km
+the whole Dales Way | 127 km
+crossing Yorkshire west to east | 145 km
+the Cleveland Way | 175 km
+the Leeds & Liverpool Canal | 204 km
+the Coast to Coast walk | 300 km
+a Bempton Cliffs Gannet's feeding flight | 320 km
+width of Great Britain at its widest point | 480 km
+the Pennine Way | 431 km
+the Yorkshire Boundary Walk | 724 km
+a Flamborough Puffin's winter migration | 800 km
+Land's End to John o'Groats | 1400 km
+a Monarch Butterfly's multi-generational migration | 4800 km
+a Cuckoo's migration from Yorkshire to Sub-Saharan Africa | 7000 km
+a Swallow's annual flight from Yorkshire to South Africa | 10000 km
+the perimeter of the Moon | 10921 km
+circumference of the Earth around the equator | 40075 km
+distance covered by the Earth in its orbit around the Sun in 1 hour | 107000 km
+an Arctic Tern’s epic annual round-trip migration | 900000 km
+distance from Earth to the Moon (average orbit) | 384400 km
+distance from Earth to the Sun (1 Astronomical Unit) | 149600000 km
+
+# ── Special dates ──
+# Shown in a little banner at the top of the page on that day.
+#
+# Formats:
+#   25-12 | message                 every year on that day (day-month)
+#   20-12 to 24-12 | message        every year, for a range of days
+#   2026-11-14 | message            one particular date only
+#
+# If several match the same day, they're all shown.
+
+[dates]
+01-01 | Happy New Year, Rose! First steps of the year 🥾
+03-01 | Full Moon 🌕 (Wolf Moon / Supermoon)
+05-01 | National Bird Day 🐦 — keep your eyes peeled on the trails!
+06-01 to 15-01 | Wolf Moon energy 🐺 — first full moon of the year, deep winter quiet
+10-01 | Third Quarter Moon 🌗
+18-01 | New Moon 🌑 — clear night skies & fresh intentions
+25-01 | First Quarter Moon 🌓
+01-02 | Full Moon 🌕 (Snow Moon)
+01-02 to 02-02 | Imbolc & St Brigid's Day 🕯️ — first whispers of spring and light returning
+09-02 | Third Quarter Moon 🌗
+14-02 | Happy Valentine's Day ❤️ — Tom, Wilbur and Eddie all love you very much
+15-02 to 24-02 | Snow Moon / Hunger Moon energy ❄️ — midwinter full moon
+17-02 | New Moon 🌑
+24-02 | First Quarter Moon 🌓
+26-02 to 20-03 | Mercury Retrograde in Pisces ♓ — rest your mind, honor your intuition, and let creative ideas gently soak without forcing final decisions
+03-03 | Full Moon 🌕 (Worm Moon / Total Lunar Eclipse 🌔 eclipse magic!)
+08-03 | International Working Women's Day & Kirkstall Abbey founding anniversary (1152) 🏰
+11-03 | Third Quarter Moon 🌗
+15-03 to 25-03 | Worm Moon energy 🪱 — final full moon of winter, earth awakening
+18-03 | New Moon 🌑
+20-03 to 21-03 | Spring Equinox / Ostara 🌿 — day and night in perfect balance
+23-03 | National Puppy Day 🐶 — extra treat night for Wilbur and Eddie!
+25-03 | First Quarter Moon 🌓
+30-03 | Opening of Temple Newsam House to the public in 1923 🏡
+01-04 | Full Moon 🌕 (Pink Moon)
+10-04 | Third Quarter Moon 🌗
+15-04 to 24-04 | Pink Moon energy 🌸 — full moon of spring blooms & new growth
+17-04 | New Moon 🌑
+22-04 | International Earth Day & Lyrid Meteor Shower peak 🌠 — look up tonight!
+23-04 | First Quarter Moon 🌓
+29-04 to 22-05 | Mercury Retrograde in Taurus ♉ — ground your roots, slow your pace, and practice patience with your body and your finances
+30-04 to 01-05 | Beltane / May Day 🌺 — fire, fertility, and welcoming full summer
+01-05 | Full Moon 🌕 (Flower Moon)
+05-05 | Peak of the Eta Aquariid Meteor Shower ✨
+08-05 | World Donkey Day 🫏
+09-05 | Third Quarter Moon 🌗
+15-05 to 25-05 | Flower Moon energy 💐 — peak spring full moon energy
+16-05 | New Moon 🌑
+23-05 | First Quarter Moon 🌓
+31-05 | Full Moon 🌕 (Blue Moon 💙 rare second full moon of the month!)
+08-06 | Third Quarter Moon 🌗
+14-06 | New Moon 🌑
+15-06 to 25-06 | Strawberry Moon energy 🍓 — first full moon of summer
+21-06 | Summer Solstice / Litha ☀️ — longest day of the year, soak up the sun!
+21-06 | First Quarter Moon 🌓
+29-06 | Full Moon 🌕 (Strawberry Moon)
+29-06 | Opening of the Leeds and Liverpool Canal in 1816 🌊
+07-07 | Third Quarter Moon 🌗
+12-07 | Peak of the Delta Aquariid Meteor Shower 🌌
+14-07 | New Moon 🌑
+15-07 to 25-07 | Buck Moon energy 🦌 — midsummer full moon & antler growth season
+21-07 | First Quarter Moon 🌓
+29-07 | Full Moon 🌕 (Buck Moon)
+01-08 | Happy Yorkshire Day! Go on, have a proper brew after 🫖
+01-08 to 02-08 | Lughnasadh / Lammas 🌾 — first harvest celebration
+05-08 | Third Quarter Moon 🌗
+08-08 | International Cat Day 🐱
+12-08 | New Moon 🌑
+12-08 | Perseid Meteor Shower peak 🌌 — the best shooting star show of the year!
+15-08 to 25-08 | Sturgeon Moon energy 🐟 — late summer full moon
+19-08 | First Quarter Moon 🌓
+26-08 | International Dog Day 🐕 — big belly rubs for Tom, Wilbur and Eddie!
+28-08 | Full Moon 🌕 (Sturgeon Moon / Partial Lunar Eclipse 🌒)
+02-09 to 25-09 | Mercury Retrograde in Virgo ♍ — breathe through small bumps, tidy your boundaries, and give yourself grace if details get messy
+04-09 | Third Quarter Moon 🌗
+04-09 | World Wildlife Day / International Vulture Awareness Day 🦅
+10-09 | New Moon 🌑
+15-09 to 25-09 | Harvest Moon / Corn Moon energy 🌽 — bright moonlight guiding late evening walks
+18-09 | First Quarter Moon 🌓
+21-09 to 23-09 | Autumn Equinox / Mabon 🍂 — second harvest and equal light and dark
+26-09 | Full Moon 🌕 (Harvest Moon / Corn Moon)
+03-10 | Third Quarter Moon 🌗
+04-10 | World Animal Day 🐾
+10-10 | New Moon 🌑
+15-10 to 25-10 | Hunter's Moon energy 🏹 — crisp autumn full moon
+18-10 | First Quarter Moon 🌓
+21-10 | Orionid Meteor Shower peak 💫
+26-10 | Full Moon 🌕 (Hunter's Moon)
+31-10 | Happy Halloween / Samhain 🎃 — the veil is thin; watch out for spooky squirrels
+01-11 | Third Quarter Moon 🌗
+05-11 | Bonfire Night! Wrap up and stay cosy with the pups 🎆
+09-11 | New Moon 🌑
+15-11 to 25-11 | Beaver Moon energy 🦫 — late autumn full moon before frost sets in
+17-11 | First Quarter Moon 🌓
+17-11 | Leonid Meteor Shower peak 🌠
+24-11 | Full Moon 🌕 (Beaver Moon / Supermoon)
+25-11 to 15-12 | Mercury Retrograde in Sagittarius ♐ — pad your schedule with extra time, protect your energy, and enjoy the journey without rushing
+01-12 | Third Quarter Moon 🌗
+03-12 | Happy Birthday, Rose! 🎂
+08-12 | New Moon 🌑
+13-12 to 14-12 | Geminid Meteor Shower peak 🌠 — bright, colorful shooting stars!
+15-12 to 25-12 | Cold Moon / Long Night Moon energy 🌕 — full moon near the solstice night
+17-12 | First Quarter Moon 🌓
+20-12 to 24-12 | Nearly Christmas — earn that mince pie!
+21-12 to 22-12 | Winter Solstice / Yule ❄️ — shortest day, rebirth of the sun
+23-12 | Full Moon 🌕 (Cold Moon / Supermoon)
+25-12 | Happy Christmas, Rose! 🎄
+26-12 | Boxing Day stroll — walk off that dinner!
+30-12 | Third Quarter Moon 🌗
+31-12 | Last walk of the year — what a year it's been!

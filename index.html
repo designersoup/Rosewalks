@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <!-- Bump this whenever you change the site, so phones fetch the new version -->
-<meta name="app-version" content="2026-11-09.2">
+<meta name="app-version" content="2026-11-11.4">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -42,7 +42,29 @@ header.top .sub{color:var(--ink2);font-size:14px;margin-top:4px;font-weight:700}
 .iconbtn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
 .card{background:var(--card);border:1.5px solid var(--ink);border-radius:22px;box-shadow:3px 3px 0 var(--ink);padding:16px;margin-bottom:16px}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;border:1.5px solid var(--ink);background:var(--card);font-weight:800;font-size:13px}
-.weatherchip{margin-bottom:10px}
+[hidden]{display:none!important}
+.chiprow{display:flex;align-items:stretch;width:100%;margin-bottom:10px;background:var(--card);border:1.5px solid var(--ink);border-radius:16px;box-shadow:2px 2px 0 var(--ink);padding:8px 12px}
+.chiprow .chip{border:0;padding:0;background:none;border-radius:0;margin:0;flex:1 1 0;min-width:0;align-items:center;gap:8px}
+.chiprow .weatherchip{flex:1.5 1 0}
+.chiprow .sunchip{border-left:1.5px dashed var(--muted);padding-left:10px;margin-left:10px}
+.chiprow .chip svg{width:22px;height:22px;flex:none}
+.infotext{display:flex;flex-direction:column;min-width:0;line-height:1.2}
+.infotext b{font-size:14px;font-weight:800;white-space:nowrap}
+.infotext small{font-size:11.5px;font-weight:700;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.datebanner{display:flex;align-items:center;gap:10px;background:#FBEBC4;border:1.5px solid var(--ink);border-radius:16px;box-shadow:2px 2px 0 var(--ink);padding:10px 14px;margin-bottom:12px;font-family:'Fraunces',serif;font-weight:700;font-size:16px;line-height:1.3}
+.datebanner .star{font-size:20px;flex:none}
+.datebanner .msgs{display:flex;flex-direction:column;gap:4px}
+.todayfact{margin-top:10px;padding-top:10px;border-top:1.5px dashed var(--track);font-size:14px;line-height:1.4;display:flex;flex-direction:column;gap:4px}
+.todayfact:empty{display:none}
+.todayfact .fi{display:inline-block;margin-right:4px}
+.nextj{margin:10px 0 4px;font-size:15px;line-height:1.35}
+.jlist{list-style:none;padding:0;margin:12px 0 0}
+.jlist li{display:flex;gap:8px;align-items:baseline;padding:7px 0;border-top:1.5px dashed var(--track);font-size:14px;font-weight:700;line-height:1.3}
+.jlist .tick{color:var(--moss);font-weight:800;flex:none}
+.jlist .km{margin-left:auto;color:var(--ink2);white-space:nowrap;padding-left:8px}
+.jlist li.new{background:#FBEBC4;border-radius:8px;padding-left:6px;padding-right:6px}
+details.more summary{cursor:pointer;font-weight:800;color:var(--ink2);font-size:13px;padding:8px 0;list-style:none}
+details.more summary::-webkit-details-marker{display:none}
 .weatherchip svg{width:20px;height:20px}
 .seg{display:flex;background:var(--track);border-radius:999px;padding:3px;margin-bottom:10px;border:1.5px solid var(--ink)}
 .seg button{flex:1;padding:7px 0;border-radius:999px;font-weight:800;font-size:14px;color:var(--ink2)}
@@ -225,7 +247,7 @@ body.sheet-open .sheet{transform:none}
 .btnrow .btn{flex:1}
 hr.sep{border:0;border-top:1.5px dashed var(--muted);margin:20px 0}
 
-.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 14px);transform:translate(-50%,-140%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:999px;font-weight:800;z-index:20;transition:transform .4s cubic-bezier(.3,1.4,.5,1);display:flex;align-items:center;gap:8px;white-space:nowrap;max-width:92vw}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 14px);transform:translate(-50%,-140%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:999px;font-weight:800;z-index:20;transition:transform .4s cubic-bezier(.3,1.4,.5,1);display:flex;align-items:center;gap:8px;max-width:92vw;text-align:center;line-height:1.3}
 .toast.show{transform:translate(-50%,0)}
 .confetti{position:fixed;top:-20px;width:10px;height:14px;border-radius:50% 0;z-index:19;pointer-events:none;animation:conf linear forwards}
 @keyframes conf{to{transform:translate(var(--dx),110vh) rotate(var(--r))}}
@@ -249,8 +271,12 @@ hr.sep{border:0;border-top:1.5px dashed var(--muted);margin:20px 0}
 
   <!-- TODAY -->
   <section class="view on" id="view-today">
-    <div class="chip weatherchip" id="wxChip" aria-label="Leeds weather">
-      <span id="wxIcon"></span><span id="wxText">Leeds · fetching weather…</span>
+    <div class="datebanner" id="dateBanner" hidden></div>
+    <div class="chiprow">
+      <div class="chip weatherchip" id="wxChip" aria-label="Leeds weather">
+        <span id="wxIcon"></span><span class="infotext"><b id="wxText">Leeds</b><small id="wxSub">fetching weather…</small></span>
+      </div>
+      <div class="chip sunchip" id="sunChip" hidden aria-label="Sunrise and sunset in Leeds"></div>
     </div>
 
     <div class="seg" role="tablist">
@@ -460,6 +486,7 @@ hr.sep{border:0;border-top:1.5px dashed var(--muted);margin:20px 0}
       </div>
       <div class="bar" id="todayBar"><i style="width:0"></i></div>
       <div id="todayToGo" style="font-weight:800"></div>
+      <div class="todayfact" id="todayFact"></div>
       <div class="muted" style="font-size:12px;margin-top:6px;font-weight:700">Tap the number to type in what your watch says</div>
     </div>
 
@@ -774,13 +801,14 @@ async function loadWords(){
       line=line.trim();if(!line||line.startsWith('#'))continue;
       const m=line.match(/^\[(.+)\]$/);if(m){sec=m[1].trim().toLowerCase();out[sec]=out[sec]||[];continue;}
       if(!sec)continue;
-      if(sec==='journeys'){const [n,km]=line.split('|').map(s=>s.trim());const v=parseFloat(km);if(n&&v>0)out[sec].push([n,v]);}
+      if(sec==='dates'){const d=parseDateLine(line);if(d)out[sec].push(d);}
+      else if(sec==='journeys'){const [n,km]=line.split('|').map(s=>s.trim());const v=parseFloat(km);if(n&&v>0)out[sec].push([n,v]);}
       else out[sec].push(line);
     }
     for(const k in out)if(out[k].length)TEXT[k]=out[k];
     const seen=new Set();TEXT.journeys=TEXT.journeys.filter(j=>{const id=j[0].toLowerCase();if(seen.has(id))return false;seen.add(id);return true;});
     TEXT.journeys.sort((a,b)=>a[1]-b[1]);
-    renderMsg();if($('#view-year').classList.contains('on'))renderYear();
+    renderDateBanner();renderMsg();renderToday();if($('#view-year').classList.contains('on'))renderYear();
   }catch(e){}
 }
 let liveWx=null, previewIdx=-1;
@@ -886,21 +914,21 @@ function applyWeather(w){
   roseEl.style.setProperty('--coat',bomber?'#1F1C1A':'#2A2A2E');roseEl.style.setProperty('--coatDark',bomber?'#141210':'#1B1B1E');
   // chip
   $('#wxIcon').innerHTML=wxIconSVG(k,day);
-  const label=w.preview?`Preview: ${k}${day?'':' (night)'} · tap`:`Leeds · ${Math.round(w.temp)}° · ${WX_LABEL[w.code]||k}${w.max!=null?` · H${Math.round(w.max)}° L${Math.round(w.min)}°`:''}`;
-  $('#wxText').textContent=label;
-  currentWx=w;renderMsg();
+  $('#wxText').textContent=`Leeds · ${Math.round(w.temp)}°`;
+  $('#wxSub').textContent=`${WX_LABEL[w.code]||k}${w.max!=null?` · H${Math.round(w.max)}° L${Math.round(w.min)}°`:''}`;
+  currentWx=w;renderSun(w);renderMsg();
 }
 let currentWx={kind:'cloudy',isDay:true,temp:10};
 async function fetchWeather(force){
-  try{const c=JSON.parse(localStorage.getItem(WXSTORE)||'null');if(c&&!force&&Date.now()-c.at<30*60e3){liveWx=c.data;if(previewIdx<0)applyWeather(liveWx);return;}}catch(e){}
+  try{const c=JSON.parse(localStorage.getItem(WXSTORE)||'null');if(c&&!force&&Date.now()-c.at<30*60e3&&c.data&&c.data.sunrise){liveWx=c.data;if(previewIdx<0)applyWeather(liveWx);return;}}catch(e){}
   try{
-    const url=`https://api.open-meteo.com/v1/forecast?latitude=${LEEDS.lat}&longitude=${LEEDS.lon}&current=temperature_2m,weather_code,is_day,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Europe%2FLondon&forecast_days=1`;
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${LEEDS.lat}&longitude=${LEEDS.lon}&current=temperature_2m,weather_code,is_day,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=Europe%2FLondon&forecast_days=1`;
     const r=await fetch(url);if(!r.ok)throw new Error(r.status);const j=await r.json();
-    liveWx={code:j.current.weather_code,kind:kindOf(j.current.weather_code),temp:j.current.temperature_2m,isDay:!!j.current.is_day,wind:j.current.wind_speed_10m,max:j.daily.temperature_2m_max[0],min:j.daily.temperature_2m_min[0],heavy:[65,82].includes(j.current.weather_code)};
+    liveWx={code:j.current.weather_code,kind:kindOf(j.current.weather_code),temp:j.current.temperature_2m,isDay:!!j.current.is_day,wind:j.current.wind_speed_10m,max:j.daily.temperature_2m_max[0],min:j.daily.temperature_2m_min[0],sunrise:j.daily.sunrise[0],sunset:j.daily.sunset[0],heavy:[65,82].includes(j.current.weather_code)};
     try{localStorage.setItem(WXSTORE,JSON.stringify({at:Date.now(),data:liveWx}));}catch(e){}
     if(previewIdx<0)applyWeather(liveWx);
   }catch(e){
-    if(!liveWx&&previewIdx<0){const h=new Date().getHours();applyWeather({kind:'cloudy',isDay:h>=7&&h<18,temp:10,code:3});$('#wxText').textContent='Leeds · weather offline';}
+    if(!liveWx&&previewIdx<0){const h=new Date().getHours();applyWeather({kind:'cloudy',isDay:h>=7&&h<18,temp:10,code:3});$('#wxText').textContent='Leeds';$('#wxSub').textContent='weather offline';}
   }
 }
 // tap the tree to preview the seasons (it follows the calendar normally)
@@ -933,6 +961,59 @@ function renderMsg(){
   $('#sceneMsg').textContent=m;
 }
 const picked={};
+
+/* ---------- special dates (from the [dates] section of words.txt) ----------
+   25-12 | message                 every year on that day (day-month)
+   20-12 to 26-12 | message        every year, a range of days
+   2026-11-14 | message            one particular date only                   */
+TEXT.dates=[];
+function parseDateLine(line){
+  const i=line.indexOf('|');if(i<0)return null;
+  const when=line.slice(0,i).trim().toLowerCase(),msg=line.slice(i+1).trim();if(!msg)return null;
+  const dm=x=>{const m=x.trim().match(/^(\d{1,2})[-\/](\d{1,2})$/);return m?Number(m[2])*100+Number(m[1]):null;};
+  let m=when.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(m)return {exact:`${m[1]}-${pad(m[2])}-${pad(m[3])}`,msg};
+  const parts=when.split(/\s*(?:to|–|—)\s*/);
+  const from=dm(parts[0]),to=parts[1]!=null?dm(parts[1]):from;
+  return from&&to?{from,to,msg}:null;
+}
+function todaysDateMessages(){
+  const t=today(),k=key(t),md=(t.getMonth()+1)*100+t.getDate();
+  return (TEXT.dates||[]).filter(d=>d.exact?d.exact===k:(d.from<=d.to?md>=d.from&&md<=d.to:md>=d.from||md<=d.to)).map(d=>d.msg);
+}
+/* ---------- distance facts ([journeys] in words.txt) ---------- */
+const escH=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtJ=n=>n<1?String(Math.round(n*100)/100):n.toLocaleString('en-GB',{maximumFractionDigits:1});
+// which journeys a distance has beaten, the biggest one beaten, and the next one to aim for
+function journeyStatus(total){
+  const J=TEXT.journeys||[];let done=null,next=J[0]||null,count=0;
+  for(const j of J){if(total>=j[1]-1e-9){done=j;count++;}else{next=j;break;}}
+  if(count===J.length)next=null;
+  return {done,next,count};
+}
+
+function renderDateBanner(){
+  const msgs=todaysDateMessages(),el=$('#dateBanner');
+  if(!msgs.length){el.hidden=true;return;}
+  el.hidden=false;el.innerHTML=`<span class="star">✨</span><span class="msgs">${msgs.map(m=>`<span>${escH(m)}</span>`).join('')}</span>`;
+}
+
+/* ---------- sunrise / sunset ---------- */
+const SUN_ICON=`<svg viewBox="0 0 24 24"><path d="M3 18h18" stroke="#2E2A26" stroke-width="1.6" stroke-linecap="round"/><path d="M6.5 18a5.5 5.5 0 0 1 11 0z" fill="#F7C948" stroke="#2E2A26" stroke-width="1.3"/><path d="M12 6.5v2.5M5 10.5l1.6 1.6M19 10.5l-1.6 1.6" stroke="#E3A93B" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+function renderSun(w){
+  const el=$('#sunChip');
+  if(!w||!w.sunrise||!w.sunset){el.hidden=true;return;}
+  const hm=iso=>iso.slice(11,16);
+  const toDate=iso=>{const [d,t]=iso.split('T');const [y,mo,da]=d.split('-').map(Number);const [h,mi]=t.split(':').map(Number);return new Date(y,mo-1,da,h,mi);};
+  const now=new Date(),rise=toDate(w.sunrise),set=toDate(w.sunset);
+  let extra;
+  if(now<rise)extra=`light in ${dur(rise-now)}`;
+  else if(now<set)extra=`dark in ${dur(set-now)}`;
+  else extra='sun has set';
+  el.hidden=false;
+  el.innerHTML=`${SUN_ICON}<span class="infotext"><b>↑ ${hm(w.sunrise)}  ↓ ${hm(w.sunset)}</b><small>${extra}</small></span>`;
+}
+function dur(ms){const m=Math.round(ms/60000),h=Math.floor(m/60);return h?`${h}h ${m%60}m`:`${m}m`;}
 function pick(arr,k){if(!(k in picked))picked[k]=Math.floor(Math.random()*arr.length);return arr[picked[k]%arr.length];}
 
 function greet(){const h=new Date().getHours();const g=h<12?'Morning':h<17?'Afternoon':'Evening';$('#greet').textContent=`${g}, Rose`;
@@ -946,6 +1027,10 @@ function renderToday(animate){
   $('#dailyTarget').textContent=`${fmt(daily)} km`;
   $('#todayBar i').style.width=Math.min(100,km/daily*100)+'%';
   const left=daily-km;
+  const jsT=journeyStatus(km);let fact='';
+  if(jsT.done)fact+=`<div><span class="fi">🐾</span>Today you've walked further than <b>${escH(jsT.done[0])}</b> <span class="muted">(${fmtJ(jsT.done[1])} km)</span></div>`;
+  if(jsT.next)fact+=`<div class="muted">${jsT.done?'Next':'First up'}: ${escH(jsT.next[0])} · <b style="color:var(--ink)">${fmtJ(jsT.next[1]-km)} km</b> to go</div>`;
+  $('#todayFact').innerHTML=fact;
   $('#todayToGo').innerHTML=left>0.0001?`<span style="color:var(--terra)">${fmt(left)} km</span> still to go today`:`${medalSVG(18)} Daily medal earned${km-daily>0.05?` · +${fmt(km-daily)} km extra`:''}`;
   $('#weekBig').innerHTML=`${fmt(wk)} <small>/ ${fmt(goal)} km</small>`;
   $('#weekBar i').style.width=Math.min(100,wk/goal*100)+'%';
@@ -1017,10 +1102,18 @@ function renderYear(){
   let bestWeek=0,weeksHit=0;for(let w=weekStart(new Date(y,0,1));w<=end;w=addDays(w,7)){const km=weekKm(w);if(addDays(w,3).getFullYear()!==y)continue;bestWeek=Math.max(bestWeek,km);if(km>=goalFor(w))weeksHit++;}
   const maxM=Math.max(1,...months);
   const chart=`<svg viewBox="0 0 336 150" width="100%">${months.map((v,i)=>{const h=v/maxM*104,x=6+i*27.5;const cur=y===t.getFullYear()&&i===t.getMonth();return `<rect x="${x}" y="${118-h}" width="19" height="${Math.max(h,2)}" rx="5" fill="${cur?'#E3A93B':'#8DA47E'}" stroke="#2E2A26" stroke-width="1.2"/>${v?`<text x="${x+9.5}" y="${112-h}" text-anchor="middle" font-size="9" font-weight="800" fill="#6E655B" font-family="Nunito">${Math.round(v)}</text>`:''}<text x="${x+9.5}" y="136" text-anchor="middle" font-size="11" font-weight="800" fill="#2E2A26" font-family="Nunito">${MONTHS[i][0]}</text>`;}).join('')}<line x1="0" y1="118.6" x2="336" y2="118.6" stroke="#2E2A26" stroke-width="1.2"/></svg>`;
-  const JOURNEYS=TEXT.journeys;const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  let done=null,next=JOURNEYS[0];for(const j of JOURNEYS){if(total>=j[1])done=j;else{next=j;break;}}if(done&&done===JOURNEYS[JOURNEYS.length-1])next=null;
-  if(done)done=[esc(done[0]),done[1]];if(next)next=[esc(next[0]),next[1]];
-  const journey=total>0?`<div class="card journey"><div class="label" style="margin-bottom:6px">How far is that?</div>${done?`You’ve walked further than <b>${done[0]}</b> (≈${done[1]} km)! `:''}${next?`Next up: <b>${next[0]}</b> — ≈${next[1]} km.<div class="bar"><i style="width:${Math.min(100,total/next[1]*100)}%"></i></div><span class="muted">${fmt(next[1]-total)} km to go</span>`:'Absolute legend. 🏴'}</div>`:'';
+  const J=TEXT.journeys||[],js=journeyStatus(total);
+  let journey='';
+  if(J.length){
+    const from=js.done?js.done[1]:0;
+    const pct=js.next?Math.max(0,Math.min(100,(total-from)/(js.next[1]-from)*100)):100;
+    const doneList=J.slice(0,js.count).reverse();   // biggest first
+    const li=(j,i)=>`<li class="${i===0?'new':''}"><span class="tick">✓</span><span>${escH(j[0])}</span><span class="km">${fmtJ(j[1])} km</span></li>`;
+    journey=`<div class="card journey"><div class="row"><div class="label">Journeys completed in ${y}</div><span class="badge">${js.count} of ${J.length}</span></div>
+      ${js.next?`<div class="nextj"><span class="muted" style="font-weight:700">Next up:</span> <b>${escH(js.next[0])}</b> · ${fmtJ(js.next[1])} km<div class="bar"><i style="width:${pct}%"></i></div><span class="muted" style="font-weight:700">${fmtJ(js.next[1]-total)} km to go</span></div>`:`<div class="nextj"><b>Every journey complete — absolute legend.</b> 🏆</div>`}
+      ${doneList.length?`<ul class="jlist">${doneList.slice(0,5).map(li).join('')}</ul>${doneList.length>5?`<details class="more"><summary>Show all ${doneList.length} ▾</summary><ul class="jlist" style="margin-top:0">${doneList.slice(5).map((j,i)=>li(j,i+5)).join('')}</ul></details>`:''}`:`<div class="muted" style="margin-top:8px">Nothing completed yet — first up is ${escH(J[0][0])}!</div>`}
+    </div>`;
+  }
   $('#yearBody').innerHTML=`<div class="card yearhead"><div class="label">Total distance in ${y}</div><div class="big">${fmt(total)}<small> km</small></div><div class="muted" style="margin-top:8px;font-weight:700">${active} walking day${active===1?'':'s'}</div></div>
     <div class="card"><div class="label" style="margin-bottom:6px">Month by month (km)</div>${chart}</div>
     ${journey}
@@ -1044,8 +1137,13 @@ function celebrateCheck(before){
   const nowDay=dayKm(key(t)),nowWeek=weekKm(ws);
   if(nowWeek>=goal&&before.week<goal){toast(`${rosetteSVG(20)} Weekly goal smashed!`);confetti(60);}
   else if(hit(nowDay,daily)&&!hit(before.day,daily)){toast(`${medalSVG(18)} Daily medal earned!`);confetti(30);}
+  // new distance facts beaten today, and new journeys completed this year
+  const d0=journeyStatus(before.day),d1=journeyStatus(nowDay);
+  if(d1.count>d0.count&&d1.done)toast(`🐾 Further than ${escH(d1.done[0])}!`);
+  const y0=journeyStatus(before.year),y1=journeyStatus(yearKm(t.getFullYear()));
+  if(y1.count>y0.count&&y1.done&&y1.done!==d1.done)toast(`🗺️ This year you've now walked ${escH(y1.done[0])}!`);
 }
-function snapshot(){const t=today();return {day:dayKm(key(t)),week:weekKm(weekStart(t))};}
+function snapshot(){const t=today();return {day:dayKm(key(t)),week:weekKm(weekStart(t)),year:yearKm(t.getFullYear())};}
 /* undo: remembers today's entries before each change */
 const undoStack=[];
 function pushUndo(){const k=key(today());undoStack.push({k,prev:JSON.parse(JSON.stringify(state.entries[k]||null))});if(undoStack.length>20)undoStack.shift();}
@@ -1133,8 +1231,14 @@ function openSettings(welcome){
 $('#openSettings').onclick=()=>openSettings(false);
 
 /* toast + confetti */
-let toastT;
-function toast(html){const t=$('#toast');t.innerHTML=html;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
+const toastQ=[];let toastBusy=false;
+function toast(html){toastQ.push(html);if(!toastBusy)nextToast();}
+function nextToast(){
+  const t=$('#toast'),h=toastQ.shift();
+  if(h==null){toastBusy=false;return;}
+  toastBusy=true;t.innerHTML=h;t.classList.add('show');
+  setTimeout(()=>{t.classList.remove('show');setTimeout(nextToast,450);},toastQ.length?2300:2800);
+}
 function confetti(n){const cols=['#D9824A','#E3A93B','#8DA47E','#E7A1A6','#C1603A','#4F6B48'];for(let i=0;i<n;i++){const c=document.createElement('i');c.className='confetti';c.style.left=rnd(0,100)+'vw';c.style.background=cols[i%cols.length];c.style.setProperty('--dx',rnd(-80,80)+'px');c.style.setProperty('--r',rnd(-720,720)+'deg');c.style.animationDuration=rnd(1.8,3.4)+'s';c.style.animationDelay=rnd(0,.4)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),4200);}}
 
 /* home-screen icon (PNG generated on the fly for iOS) */
@@ -1162,8 +1266,10 @@ loadWords();
 makeTouchIcon();
 if(!Object.keys(state.goals).length)setTimeout(()=>openSettings(true),700);
 setInterval(()=>fetchWeather(),30*60e3);
+setInterval(()=>renderSun(currentWx),60e3);
+renderDateBanner();
 let lastDay=key(today());
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){checkForUpdate();fetchWeather();if(key(today())!==lastDay){lastDay=key(today());renderToday(true);}greet();}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){checkForUpdate();fetchWeather();if(key(today())!==lastDay){lastDay=key(today());renderToday(true);renderDateBanner();}greet();}});
 })();
 </script>
 </body>

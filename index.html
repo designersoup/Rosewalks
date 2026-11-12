@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <!-- Bump this whenever you change the site, so phones fetch the new version -->
-<meta name="app-version" content="2026-11-11.4">
+<meta name="app-version" content="2026-11-12.1">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -45,11 +45,13 @@ header.top .sub{color:var(--ink2);font-size:14px;margin-top:4px;font-weight:700}
 [hidden]{display:none!important}
 .chiprow{display:flex;align-items:stretch;width:100%;margin-bottom:10px;background:var(--card);border:1.5px solid var(--ink);border-radius:16px;box-shadow:2px 2px 0 var(--ink);padding:8px 12px}
 .chiprow .chip{border:0;padding:0;background:none;border-radius:0;margin:0;flex:1 1 0;min-width:0;align-items:center;gap:8px}
-.chiprow .weatherchip{flex:1.5 1 0}
-.chiprow .sunchip{border-left:1.5px dashed var(--muted);padding-left:10px;margin-left:10px}
+.chiprow .weatherchip{flex:1 1 auto}
+.chiprow .sunchip{flex:0 0 auto;border-left:1.5px dashed var(--muted);padding-left:9px;margin-left:9px;gap:6px}
 .chiprow .chip svg{width:22px;height:22px;flex:none}
 .infotext{display:flex;flex-direction:column;min-width:0;line-height:1.2}
-.infotext b{font-size:14px;font-weight:800;white-space:nowrap}
+.infotext b{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sunchip .infotext b{font-size:13.5px}
+@media (max-width:350px){.chiprow{padding:8px 10px}.sunchip .infotext b{font-size:12.5px}.chiprow .chip svg{width:19px;height:19px}}
 .infotext small{font-size:11.5px;font-weight:700;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .datebanner{display:flex;align-items:center;gap:10px;background:#FBEBC4;border:1.5px solid var(--ink);border-radius:16px;box-shadow:2px 2px 0 var(--ink);padding:10px 14px;margin-bottom:12px;font-family:'Fraunces',serif;font-weight:700;font-size:16px;line-height:1.3}
 .datebanner .star{font-size:20px;flex:none}

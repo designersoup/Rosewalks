@@ -103,7 +103,7 @@ the distance a Fey/Fairy travels on a gust of wind | 0.2 km
 a Robin’s brave hop around a Yorkshire garden | 0.3 km
 a Mouse’s midnight expedition across the kitchen floor | 0.5 km
 a Bumblebee’s daily flower-to-flower pollen trail | 1 km
-a Witch’s swift midnight broomstick test-flight | 1.5 km
+
 a Common Toad's annual pond migration | 2 km
 a Hedgehog's nightly foraging stroll | 3 km
 a Squirrel’s frantic hunt for forgotten acorns | 4 km
